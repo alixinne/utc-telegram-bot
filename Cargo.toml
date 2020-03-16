@@ -14,9 +14,17 @@ env_logger = "0.7.1"
 tokio = { version = "0.2.13", features = ["macros", "fs"] }
 futures = "0.3"
 telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = "8e363c51" }
-resvg = { version = "0.9.0", features = ["cairo-backend", "text"] }
 fuzzy-matcher = "0.3.4"
-image = { version = "0.23.1", default-features = false, features = ["jpeg"] }
 rand = "0.7.3"
 paw = "1.0.0"
 structopt = { version = "0.3.11", features = ["paw"] }
+
+image = { version = "0.23.1", default-features = false, features = ["jpeg"], optional = true }
+resvg = { version = "0.9.0", features = ["cairo-backend", "text"], optional = true }
+cairo-rs = { version = "0.8.1", optional = true }
+pangocairo = { version = "0.9.0", optional = true }
+pango = { version = "0.8.0", optional = true }
+
+[features]
+default = []
+renderer = ["image", "resvg", "cairo-rs", "pangocairo", "pango"]
