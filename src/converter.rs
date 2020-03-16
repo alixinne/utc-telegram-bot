@@ -9,11 +9,17 @@ static RAW_MAP_STR: &str = include_str!("../alphabets.txt");
 const CHARS_PER_MAP: usize = 126 - 33 + 1;
 
 #[derive(Clone)]
-pub struct CharMap([char; CHARS_PER_MAP]);
+pub struct CharMap {
+    data: [char; CHARS_PER_MAP],
+    insert_nonbreak: bool,
+}
 
 impl CharMap {
     pub fn new() -> Self {
-        Self(['\0'; CHARS_PER_MAP])
+        Self {
+            data: ['\0'; CHARS_PER_MAP],
+            insert_nonbreak: false,
+        }
     }
 
     fn map_char_to_range(c: char) -> Option<usize> {
@@ -30,13 +36,22 @@ impl CharMap {
     }
 
     pub fn set_idx(&mut self, idx: usize, dst: char) {
-        self.0[idx] = dst;
+        self.data[idx] = dst;
     }
 
-    pub fn map_chr(&self, src: char) -> char {
+    pub fn map_chr(&self, src: char) -> String {
         Self::map_char_to_range(src)
-            .map(|idx| self.0[idx])
-            .unwrap_or(src)
+            .map(|idx| {
+                if self.insert_nonbreak && self.data[idx] != src {
+                    let mut s = String::with_capacity(2);
+                    s.push(self.data[idx]);
+                    s.push('\u{00A0}');
+                    s
+                } else {
+                    self.data[idx].to_string()
+                }
+            })
+            .unwrap_or_else(|| src.to_string())
     }
 
     pub fn map_string(&self, src: &str) -> String {
@@ -46,7 +61,7 @@ impl CharMap {
 
 impl fmt::Debug for CharMap {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_list().entries(self.0.iter()).finish()
+        f.debug_list().entries(self.data.iter()).finish()
     }
 }
 
@@ -130,7 +145,7 @@ impl Map {
     }
 
     fn render_image(&mut self, renderer: &Renderer) {
-        self.image = renderer.render_map_image(self.char_map.map_chr('a'));
+        self.image = renderer.render_map_image(self.char_map.map_chr('a').chars().next().unwrap());
 
         std::fs::write(self.short_name.clone() + ".jpg", &self.image[..]).unwrap();
     }
@@ -189,14 +204,20 @@ impl MapList {
                 State::ParseMap { current_index } => match c {
                     '\r' => {}
                     '\n' => {
-                        let map = Map::new(
+                        let mut map = Map::new(
                             current_map_idx,
                             std::mem::replace(&mut current_name, String::with_capacity(80)),
                             std::mem::replace(&mut current_line, CharMap::new()),
                         );
+
                         if !map.full_name.starts_with("#") {
+                            if map.full_name.contains("Regional") {
+                                map.char_map.insert_nonbreak = true;
+                            }
+
                             mp.insert(map.short_name.clone(), map);
                         }
+
                         current_state = State::ParseName;
                         current_map_idx += 1;
                     }
