@@ -7,4 +7,16 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-telegram-bot = "0.6.3"
+heck = "0.3.1"
+failure = "0.1.7"
+log = "0.4.8"
+env_logger = "0.7.1"
+tokio = { version = "0.2.13", features = ["macros", "fs"] }
+futures = "0.3"
+telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = "8e363c51" }
+resvg = { version = "0.9.0", features = ["cairo-backend", "text"] }
+fuzzy-matcher = "0.3.4"
+image = { version = "0.23.1", default-features = false, features = ["jpeg"] }
+rand = "0.7.3"
+paw = "1.0.0"
+structopt = { version = "0.3.11", features = ["paw"] }
