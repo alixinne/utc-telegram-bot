@@ -33,23 +33,16 @@ impl CharMap {
         self.data[idx] = dst;
     }
 
-    pub fn map_chr(&self, src: char) -> String {
-        Self::map_char_to_range(src)
-            .map(|idx| {
-                if self.insert_nonbreak && self.data[idx] != src {
-                    let mut s = String::with_capacity(2);
-                    s.push(self.data[idx]);
-                    s.push('\u{00A0}');
-                    s
-                } else {
-                    self.data[idx].to_string()
-                }
-            })
-            .unwrap_or_else(|| src.to_string())
-    }
+    pub fn map_chr(&self, src: char, dest: &mut String) {
+        if let Some(idx) = Self::map_char_to_range(src) {
+            dest.push(self.data[idx]);
 
-    pub fn map_string(&self, src: &str) -> String {
-        src.chars().map(|c| self.map_chr(c)).collect()
+            if self.insert_nonbreak && self.data[idx] != src {
+                dest.push('\u{00A0}');
+            }
+        } else {
+            dest.push(src);
+        }
     }
 }
 

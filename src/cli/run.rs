@@ -47,8 +47,8 @@ fn parse_message(msg: &str) -> (Option<String>, Option<String>) {
 pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
     let api = Api::new(opt.token);
 
-    // Load maps
-    let maps = converter::MapList::new();
+    // Load transforms
+    let transforms = converter::TransformList::new();
 
     // Rng for IDs
     let mut rng = rand::thread_rng();
@@ -66,11 +66,11 @@ pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
 
                     // Find name
                     match parse_message(data) {
-                        (Some(map_name), Some(msg)) => match maps.map_string(&map_name, &msg) {
+                        (Some(transform_name), Some(msg)) => match transforms.transform_string(&transform_name, &msg) {
                             Ok(result) => api.send(message.text_reply(result)),
                             Err(error) => api.send(message.text_reply(format!("{}", error))),
                         },
-                        _ => api.send(message.text_reply("Usage: map_name message")),
+                        _ => api.send(message.text_reply("Usage: transform_name message")),
                     }
                     .await?;
                 }
@@ -80,15 +80,15 @@ pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
 
                 let data = &query.query;
                 let matches = match parse_message(data) {
-                    (Some(map_name), Some(msg)) => {
-                        let fuzzy_matches = maps.get_fuzzy_matches(&map_name, &msg);
+                    (Some(transform_name), Some(msg)) => {
+                        let fuzzy_matches = transforms.get_fuzzy_matches(&transform_name, &msg);
                         if fuzzy_matches.is_empty() {
-                            maps.get_all_matches(data)
+                            transforms.get_all_matches(data)
                         } else {
                             fuzzy_matches
                         }
                     }
-                    _ => maps.get_all_matches(data),
+                    _ => transforms.get_all_matches(data),
                 };
 
                 let mut results = vec![];
@@ -98,14 +98,14 @@ pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
                         .take(16)
                         .collect();
 
-                    let photo_url = opt.image_url.clone() + &r.map.short_name + ".jpg";
+                    let photo_url = opt.image_url.clone() + &r.transform.short_name + ".jpg";
 
                     results.push(InlineQueryResult::from(InlineQueryResultVideo {
                         id,
                         thumb_url: photo_url.clone(),
                         mime_type: "text/html".to_owned(),
                         video_url: photo_url,
-                        title: r.map.full_name.clone(),
+                        title: r.transform.full_name.clone(),
                         video_duration: None,
                         video_height: None,
                         video_width: None,

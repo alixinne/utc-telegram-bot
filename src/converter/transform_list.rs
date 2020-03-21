@@ -1,22 +1,22 @@
 use std::collections::HashMap;
 use std::fmt;
 
-use super::{CharMap, Map, MapError};
+use super::{CharMap, Map, TransformEntry, TransformError};
 
 static RAW_MAP_STR: &str = include_str!("../../alphabets.txt");
 
-pub struct MapList {
-    maps: HashMap<String, Map>,
+pub struct TransformList {
+    transforms: HashMap<String, TransformEntry>,
     matcher: BotFuzzyMatcher,
 }
 
 pub struct FuzzyMatchResult<'a> {
-    pub map: &'a Map,
+    pub transform: &'a TransformEntry,
     pub score: i64,
     pub result: String,
 }
 
-impl MapList {
+impl TransformList {
     pub fn new() -> Self {
         let mut mp = HashMap::new();
 
@@ -44,18 +44,26 @@ impl MapList {
                 State::ParseMap { current_index } => match c {
                     '\r' => {}
                     '\n' => {
-                        let mut map = Map::new(
+                        // Check if it needs the fix for combining chars
+                        if current_name.contains("Regional") {
+                            current_line.insert_nonbreak = true;
+                        }
+
+                        // Create map object
+                        let map = Map::new(std::mem::replace(&mut current_line, CharMap::new()));
+
+                        // Create transform entry
+                        let entry = TransformEntry::new(
                             current_map_idx,
-                            std::mem::replace(&mut current_name, String::with_capacity(80)),
-                            std::mem::replace(&mut current_line, CharMap::new()),
+                            &current_name,
+                            Box::new(map),
                         );
 
-                        if !map.full_name.starts_with('#') {
-                            if map.full_name.contains("Regional") {
-                                map.char_map.insert_nonbreak = true;
-                            }
+                        // current_name used by that point
+                        current_name.clear();
 
-                            mp.insert(map.short_name.clone(), map);
+                        if !entry.full_name.starts_with('#') {
+                            mp.insert(entry.short_name.clone(), entry);
                         }
 
                         current_state = State::ParseName;
@@ -71,19 +79,19 @@ impl MapList {
             }
         }
 
-        info!("loaded {} maps", mp.len());
+        info!("loaded {} transforms", mp.len());
 
         Self {
-            maps: mp,
+            transforms: mp,
             matcher: BotFuzzyMatcher::default(),
         }
     }
 
-    pub fn map_string(&self, map_name: &str, src: &str) -> Result<String, MapError> {
-        self.maps
+    pub fn transform_string(&self, map_name: &str, src: &str) -> Result<String, TransformError> {
+        self.transforms
             .get(map_name)
             .map(|map| map.as_ref().map_string(src))
-            .ok_or_else(|| MapError::MapNotFound(map_name.to_owned()))
+            .ok_or_else(|| TransformError::TransformNotFound(map_name.to_owned()))
     }
 
     pub fn get_fuzzy_matches<'a>(
@@ -94,13 +102,13 @@ impl MapList {
         use fuzzy_matcher::FuzzyMatcher;
 
         let mut v: Vec<_> = self
-            .maps
+            .transforms
             .iter()
             .filter_map(|(k, v)| {
                 self.matcher
                     .fuzzy_match(k, partial_map_name)
                     .map(|score| FuzzyMatchResult {
-                        map: v,
+                        transform: v,
                         score,
                         result: v.as_ref().map_string(src),
                     })
@@ -113,10 +121,10 @@ impl MapList {
 
     pub fn get_all_matches<'a>(&'a self, src: &str) -> Vec<FuzzyMatchResult<'a>> {
         let mut v: Vec<_> = self
-            .maps
+            .transforms
             .iter()
             .map(|(_k, v)| FuzzyMatchResult {
-                map: v,
+                transform: v,
                 score: v.idx as i64,
                 result: v.as_ref().map_string(src),
             })
@@ -127,14 +135,16 @@ impl MapList {
     }
 
     #[allow(dead_code)]
-    pub fn maps(&self) -> impl Iterator<Item = &'_ Map> {
-        self.maps.values()
+    pub fn transforms(&self) -> impl Iterator<Item = &'_ TransformEntry> {
+        self.transforms.values()
     }
 }
 
-impl fmt::Debug for MapList {
+impl fmt::Debug for TransformList {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("MapList").field("maps", &self.maps).finish()
+        f.debug_struct("TransformList")
+            .field("transforms", &self.transforms)
+            .finish()
     }
 }
 

@@ -4,26 +4,32 @@ pub use char_map::*;
 mod map;
 pub use map::*;
 
-mod map_error;
-pub use map_error::*;
+mod transform;
+pub use transform::*;
 
-mod map_list;
-pub use map_list::*;
+mod transform_entry;
+pub use transform_entry::*;
+
+mod transform_error;
+pub use transform_error::*;
+
+mod transform_list;
+pub use transform_list::*;
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn map_list_init() {
-        println!("{:?}", MapList::new());
+    fn transform_list_init() {
+        println!("{:?}", TransformList::new());
     }
 
     #[test]
-    fn map_list_map_string_circled() {
+    fn transform_list_transform_string_circled() {
         assert_eq!(
             Ok("Ⓗⓔⓛⓛⓞ, ⓦⓞⓡⓛⓓ!".to_owned()),
-            MapList::new().map_string("circled", "Hello, world!")
+            TransformList::new().transform_string("circled", "Hello, world!")
         );
     }
 }
