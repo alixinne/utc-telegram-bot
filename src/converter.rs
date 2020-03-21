@@ -4,6 +4,9 @@ pub use char_map::*;
 mod map;
 pub use map::*;
 
+mod spongebob;
+pub use spongebob::*;
+
 mod transform;
 pub use transform::*;
 

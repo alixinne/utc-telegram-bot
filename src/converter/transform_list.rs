@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::fmt;
 
-use super::{CharMap, Map, TransformEntry, TransformError};
+use super::{CharMap, Map, Spongebob, TransformEntry, TransformError};
 
 static RAW_MAP_STR: &str = include_str!("../../alphabets.txt");
 
@@ -20,6 +20,9 @@ impl TransformList {
     pub fn new() -> Self {
         let mut mp = HashMap::new();
 
+        let entry = TransformEntry::new(0, "Spongebob", Box::new(Spongebob::new()));
+        mp.insert(entry.short_name.clone(), entry);
+
         let mut current_line = CharMap::new();
         let mut current_name = String::with_capacity(80);
 
@@ -29,7 +32,7 @@ impl TransformList {
         }
 
         let mut current_state = State::ParseName;
-        let mut current_map_idx = 0;
+        let mut current_map_idx = mp.len();
 
         for c in RAW_MAP_STR.chars() {
             match current_state {
@@ -53,11 +56,8 @@ impl TransformList {
                         let map = Map::new(std::mem::replace(&mut current_line, CharMap::new()));
 
                         // Create transform entry
-                        let entry = TransformEntry::new(
-                            current_map_idx,
-                            &current_name,
-                            Box::new(map),
-                        );
+                        let entry =
+                            TransformEntry::new(current_map_idx, &current_name, Box::new(map));
 
                         // current_name used by that point
                         current_name.clear();
