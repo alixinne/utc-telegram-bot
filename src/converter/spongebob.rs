@@ -37,16 +37,19 @@ impl Transformer<'_> for SpongebobTransformer {
                 self.current_state = CurrentState::Lowercase;
                 dest.push('i');
             }
-            c => match self.current_state {
+            c if c.is_alphabetic() => match self.current_state {
                 CurrentState::Uppercase => {
-                    self.current_state = CurrentState::Lowercase;
                     dest.extend(c.to_lowercase());
+                    self.current_state = CurrentState::Lowercase;
                 }
                 CurrentState::Lowercase => {
-                    self.current_state = CurrentState::Uppercase;
                     dest.extend(c.to_uppercase());
+                    self.current_state = CurrentState::Uppercase;
                 }
             },
+            c => {
+                dest.push(c);
+            }
         }
     }
 }
@@ -54,5 +57,22 @@ impl Transformer<'_> for SpongebobTransformer {
 impl Transform for Spongebob {
     fn get_transfomer(&'_ self) -> Box<dyn Transformer<'_> + '_> {
         Box::new(SpongebobTransformer::default())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_only_alpha() {
+        let t = Spongebob::new();
+        assert_eq!("HeLLo", &t.map_string("hello"));
+    }
+
+    #[test]
+    fn test_non_alpha() {
+        let t = Spongebob::new();
+        assert_eq!("HeLLo WoRLd!", &t.map_string("hello world!"));
     }
 }
