@@ -1,10 +1,10 @@
-use crate::converter::Map;
+use crate::converter::Transform;
 
 mod resvg;
 mod cairo;
 
 pub trait Renderer {
-    fn render_image(&self, map: &Map) -> Vec<u8>;
+    fn render_image(&self, transform: &dyn Transform) -> Vec<u8>;
 }
 
 pub fn new_resvg() -> impl Renderer {

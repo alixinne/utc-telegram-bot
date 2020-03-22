@@ -13,14 +13,14 @@ pub struct GenerateImagesOpts {
 
 pub async fn generate_images(opt: GenerateImagesOpts) -> Result<(), failure::Error> {
     let renderer = renderer::new_cairo();
-    for map in converter::MapList::new().maps() {
-        debug!("rendering image for {}", map.full_name);
+    for transform in converter::TransformList::new().transforms() {
+        debug!("rendering image for {}", transform.full_name);
 
-        let image = renderer.render_image(map);
+        let image = renderer.render_image(transform.as_ref());
         std::fs::write(
             opt.output
                 .clone()
-                .join(PathBuf::from(map.short_name.clone() + ".jpg")),
+                .join(PathBuf::from(transform.short_name.clone() + ".jpg")),
             &image[..],
         )
         .unwrap();

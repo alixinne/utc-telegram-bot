@@ -1,4 +1,4 @@
-use crate::converter::Map;
+use crate::converter::Transform;
 
 pub struct Renderer {
 }
@@ -8,7 +8,7 @@ impl Renderer {
         Self {}
     }
 
-    fn render_map_image(&self, c: char) -> Vec<u8> {
+    fn render_map_image(&self, c: &str) -> Vec<u8> {
         let mut surface = cairo::ImageSurface::create(cairo::Format::ARgb32, 128, 128).unwrap();
         let context = cairo::Context::new(&surface);
 
@@ -22,7 +22,7 @@ impl Renderer {
 
         let layout = pangocairo::create_layout(&context).unwrap();
         layout.set_font_description(Some(&desc));
-        layout.set_text(&c.to_string());
+        layout.set_text(c);
         layout.set_alignment(pango::Alignment::Center);
 
         let sz = layout.get_pixel_size();
@@ -45,7 +45,7 @@ impl Renderer {
 }
 
 impl super::Renderer for Renderer {
-    fn render_image(&self, map: &Map) -> Vec<u8> {
-        self.render_map_image(map.char_map.map_chr('a').chars().next().unwrap())
+    fn render_image(&self, transform: &dyn Transform) -> Vec<u8> {
+        self.render_map_image(&transform.map_string("ab"))
     }
 }
