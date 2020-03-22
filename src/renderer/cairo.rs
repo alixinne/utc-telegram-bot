@@ -18,7 +18,7 @@ impl Renderer {
         context.set_source_rgb(0.01, 0.01, 0.01);
 
         let mut desc = pango::FontDescription::from_string("DejaVu Serif");
-        desc.set_size(1024 * 72);
+        desc.set_size(1024 * 48);
 
         let layout = pangocairo::create_layout(&context).unwrap();
         layout.set_font_description(Some(&desc));
