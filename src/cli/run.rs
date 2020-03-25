@@ -124,6 +124,7 @@ pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
                 }
 
                 let answer = query.answer(results);
+                debug!("answer: {:?}", answer);
                 match api.send(answer).await {
                     Ok(_) => {}
                     Err(error) => error!("api error: {}", error),
