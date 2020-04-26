@@ -125,11 +125,34 @@ pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
                     }));
                 }
 
+                let query_details = if log_enabled!(log::Level::Error) {
+                    Some(format!("request: {:?}", query))
+                } else {
+                    None
+                };
+
                 let answer = query.answer(results);
                 debug!("answer: {:?}", answer);
+
+                let query_details = if log_enabled!(log::Level::Error) {
+                    Some(format!(
+                        "{}, response: {:?}",
+                        query_details.unwrap(),
+                        answer
+                    ))
+                } else {
+                    None
+                };
+
                 match api.send(answer).await {
                     Ok(_) => {}
-                    Err(error) => error!("api error: {}", error),
+                    Err(error) => {
+                        let emsg = format!("{}", error);
+
+                        if !emsg.contains("Bad Request: SEND_MESSAGE_MEDIA_INVALID") {
+                            error!("api error: {} ({})", emsg, query_details.unwrap());
+                        }
+                    }
                 }
             }
             other => {
