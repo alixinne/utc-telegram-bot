@@ -55,7 +55,7 @@ impl Transformer<'_> for SpongebobTransformer {
 }
 
 impl Transform for Spongebob {
-    fn get_transfomer(&'_ self) -> Box<dyn Transformer<'_> + '_> {
+    fn get_transfomer(&'_ self, _: &str) -> Box<dyn Transformer<'_> + '_> {
         Box::new(SpongebobTransformer::default())
     }
 }

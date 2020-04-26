@@ -3,7 +3,7 @@ pub trait Transformer<'a> {
 }
 
 pub trait Transform: std::fmt::Debug {
-    fn get_transfomer(&'_ self) -> Box<dyn Transformer + '_>;
+    fn get_transfomer(&'_ self, src: &str) -> Box<dyn Transformer + '_>;
 
     fn map_string(&self, src: &str) -> String {
         // First, look for ranges to map
@@ -18,7 +18,7 @@ pub trait Transform: std::fmt::Debug {
             Mapping {
                 start: usize,
                 last_char_whitespace: bool,
-            }
+            },
         }
 
         let mut ranges = Vec::new();
@@ -30,7 +30,7 @@ pub trait Transform: std::fmt::Debug {
                     if c == '*' {
                         state = State::OpeningStar;
                     }
-                },
+                }
                 State::OpeningStar => {
                     if c.is_whitespace() {
                         // Not a star followed by something
@@ -39,17 +39,17 @@ pub trait Transform: std::fmt::Debug {
                         // Star followed by something, start mapping
                         state = State::Mapping {
                             start: idx,
-                            last_char_whitespace: false
+                            last_char_whitespace: false,
                         };
                     }
-                },
-                State::Mapping { start, last_char_whitespace } => {
+                }
+                State::Mapping {
+                    start,
+                    last_char_whitespace,
+                } => {
                     if !last_char_whitespace && c == '*' {
                         // Star following non-whitespace
-                        ranges.push(Range {
-                            start,
-                            end: idx,
-                        });
+                        ranges.push(Range { start, end: idx });
 
                         state = State::NotMapping;
                     } else {
@@ -63,7 +63,7 @@ pub trait Transform: std::fmt::Debug {
         }
 
         // Now map actual ranges
-        let mut transformer = self.get_transfomer();
+        let mut transformer = self.get_transfomer(src);
         let mut result = String::with_capacity(src.len() * 2);
 
         if ranges.is_empty() {

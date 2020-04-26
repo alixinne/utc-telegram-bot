@@ -19,6 +19,9 @@ pub use transform_error::*;
 mod transform_list;
 pub use transform_list::*;
 
+mod zalgo;
+pub use zalgo::*;
+
 #[cfg(test)]
 mod tests {
     use super::*;

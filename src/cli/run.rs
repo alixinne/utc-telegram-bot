@@ -66,10 +66,12 @@ pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
 
                     // Find name
                     match parse_message(data) {
-                        (Some(transform_name), Some(msg)) => match transforms.transform_string(&transform_name, &msg) {
-                            Ok(result) => api.send(message.text_reply(result)),
-                            Err(error) => api.send(message.text_reply(format!("{}", error))),
-                        },
+                        (Some(transform_name), Some(msg)) => {
+                            match transforms.transform_string(&transform_name, &msg) {
+                                Ok(result) => api.send(message.text_reply(result)),
+                                Err(error) => api.send(message.text_reply(format!("{}", error))),
+                            }
+                        }
                         _ => api.send(message.text_reply("Usage: transform_name message")),
                     }
                     .await?;

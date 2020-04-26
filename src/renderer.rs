@@ -1,7 +1,7 @@
 use crate::converter::Transform;
 
-mod resvg;
 mod cairo;
+mod resvg;
 
 pub trait Renderer {
     fn render_image(&self, transform: &dyn Transform) -> Vec<u8>;

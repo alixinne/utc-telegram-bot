@@ -7,9 +7,7 @@ pub struct Map {
 
 impl Map {
     pub fn new(char_map: CharMap) -> Self {
-        Self {
-            char_map,
-        }
+        Self { char_map }
     }
 }
 
@@ -24,7 +22,9 @@ impl<'a> Transformer<'a> for MapTransformer<'a> {
 }
 
 impl Transform for Map {
-    fn get_transfomer(&'_ self) -> Box<dyn Transformer<'_> + '_> {
-        Box::new(MapTransformer { char_map: &self.char_map })
+    fn get_transfomer(&'_ self, _: &str) -> Box<dyn Transformer<'_> + '_> {
+        Box::new(MapTransformer {
+            char_map: &self.char_map,
+        })
     }
 }

@@ -1,7 +1,6 @@
 use crate::converter::Transform;
 
-pub struct Renderer {
-}
+pub struct Renderer {}
 
 impl Renderer {
     pub fn new() -> Self {
@@ -33,7 +32,8 @@ impl Renderer {
 
         // Encode it as JPEG
         // TODO: DO not copy here
-        let image = image::RgbaImage::from_raw(128, 128, (&*surface.get_data().unwrap()).to_vec()).unwrap();
+        let image =
+            image::RgbaImage::from_raw(128, 128, (&*surface.get_data().unwrap()).to_vec()).unwrap();
 
         let mut encoded: Vec<u8> = Vec::new();
         image::DynamicImage::ImageRgba8(image)
