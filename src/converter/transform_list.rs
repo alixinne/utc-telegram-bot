@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::fmt;
 
-use super::{CharMap, Map, Spongebob, TransformEntry, TransformError, Zalgo, ZalgoPreset};
+use super::{CharMap, Map, Spongebob, Spread, TransformEntry, TransformError, Zalgo, ZalgoPreset};
 
 static RAW_MAP_STR: &str = include_str!("../../alphabets.txt");
 
@@ -21,6 +21,9 @@ impl TransformList {
         let mut mp = HashMap::new();
 
         let entry = TransformEntry::new(0, "Spongebob", Box::new(Spongebob::new()));
+        mp.insert(entry.short_name.clone(), entry);
+
+        let entry = TransformEntry::new(1, "Spread", Box::new(Spread::new()));
         mp.insert(entry.short_name.clone(), entry);
 
         let entry = TransformEntry::new(
