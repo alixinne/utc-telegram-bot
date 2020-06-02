@@ -27,21 +27,21 @@ impl TransformList {
         mp.insert(entry.short_name.clone(), entry);
 
         let entry = TransformEntry::new(
-            0,
+            2,
             "Zalgo",
             Box::new(Zalgo::new(ZalgoPreset::Normal, true, true, true)),
         );
         mp.insert(entry.short_name.clone(), entry);
 
         let entry = TransformEntry::new(
-            0,
+            3,
             "Zalgo Mini",
             Box::new(Zalgo::new(ZalgoPreset::Mini, true, true, true)),
         );
         mp.insert(entry.short_name.clone(), entry);
 
         let entry = TransformEntry::new(
-            0,
+            4,
             "Zalgo Maxi",
             Box::new(Zalgo::new(ZalgoPreset::Maxi, true, true, true)),
         );
