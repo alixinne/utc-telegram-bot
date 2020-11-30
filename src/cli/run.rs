@@ -65,7 +65,7 @@ pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
                     trace!("<{}>: {}", &message.from.first_name, data);
 
                     // Find name
-                    match parse_message(data) {
+                    match match parse_message(data) {
                         (Some(transform_name), Some(msg)) => {
                             match transforms.transform_string(&transform_name, &msg) {
                                 Ok(result) => api.send(message.text_reply(result)),
@@ -74,7 +74,11 @@ pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
                         }
                         _ => api.send(message.text_reply("Usage: transform_name message")),
                     }
-                    .await?;
+                    .await
+                    {
+                        Ok(_) => {}
+                        Err(error) => warn!("error handling request: {:?}", error),
+                    }
                 }
             }
             UpdateKind::InlineQuery(query) => {
