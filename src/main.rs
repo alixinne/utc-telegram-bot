@@ -49,10 +49,10 @@ pub async fn main(opt: Opt) -> Result<(), CliError> {
             .filter_or(
                 "UTC_TELEGRAM_BOT_LOG",
                 match opt.verbose {
-                    0 => "warn",
-                    1 => "info",
-                    2 => "debug",
-                    _ => "trace",
+                    0 => "utc_telegram_bot=warn",
+                    1 => "utc_telegram_bot=info",
+                    2 => "utc_telegram_bot=debug",
+                    _ => "utc_telegram_bot=trace",
                 },
             )
             .write_style("UTC_TELEGRAM_BOT_LOG_STYLE"),
