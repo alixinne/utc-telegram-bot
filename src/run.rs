@@ -112,57 +112,71 @@ async fn handle_request(
             let mut results = vec![];
 
             let data = &query.query;
-            let matches = match parse_message(data) {
-                (Some(transform_name), Some(msg)) => {
-                    let fuzzy_matches = transforms.get_fuzzy_matches(&transform_name, &msg);
-                    if fuzzy_matches.is_empty() {
-                        transforms.get_all_matches(data)
+            let (matches, request_empty) = match parse_message(data) {
+                (Some(transform_name), Some(msg)) => (
+                    {
+                        let fuzzy_matches = transforms.get_fuzzy_matches(&transform_name, &msg);
+                        if fuzzy_matches.is_empty() {
+                            transforms.get_all_matches(data)
+                        } else {
+                            fuzzy_matches
+                        }
+                    },
+                    false,
+                ),
+                _ => (
+                    if data.is_empty() {
+                        vec![]
                     } else {
-                        fuzzy_matches
-                    }
-                }
-                _ => transforms.get_all_matches(data),
+                        transforms.get_all_matches(data)
+                    },
+                    data.is_empty(),
+                ),
             };
 
-            // Compute result set
-            for r in matches {
-                let id = {
-                    let mut rng = ctx.rng.lock().unwrap();
+            if request_empty {
+                // The request is empty, do not add results, they would be invalid
+            } else {
+                // Compute result set
+                for r in matches {
+                    let id = {
+                        let mut rng = ctx.rng.lock().unwrap();
 
-                    // safety: we only generate alphanumeric chars, they are valid UTF-8
-                    unsafe {
-                        String::from_utf8_unchecked(
-                            std::iter::repeat(())
-                                .map(|()| rng.sample(rand::distributions::Alphanumeric))
-                                .take(16)
-                                .collect(),
-                        )
-                    }
-                };
+                        // safety: we only generate alphanumeric chars, they are valid UTF-8
+                        unsafe {
+                            String::from_utf8_unchecked(
+                                std::iter::repeat(())
+                                    .map(|()| rng.sample(rand::distributions::Alphanumeric))
+                                    .take(16)
+                                    .collect(),
+                            )
+                        }
+                    };
 
-                let photo_url = opt.image_url.clone() + &r.transform.short_name + ".jpg";
+                    let photo_url = opt.image_url.clone() + &r.transform.short_name + ".jpg";
 
-                results.push(InlineQueryResult::from(InlineQueryResultVideo {
-                    id,
-                    thumb_url: photo_url.clone(),
-                    mime_type: "text/html".to_owned(),
-                    video_url: photo_url,
-                    title: r.transform.full_name.clone(),
-                    video_duration: None,
-                    video_height: None,
-                    video_width: None,
-                    description: Some(r.result.clone()),
-                    caption: None,
-                    parse_mode: None,
-                    reply_markup: None,
-                    input_message_content: Some(InputMessageContent::from(
-                        InputTextMessageContent {
-                            message_text: r.result,
-                            parse_mode: Some(ParseMode::Markdown),
-                            disable_web_page_preview: false,
-                        },
-                    )),
-                }));
+                    results.push(InlineQueryResult::from(InlineQueryResultVideo {
+                        id,
+                        thumb_url: photo_url.clone(),
+                        mime_type: "text/html".to_owned(),
+                        video_url: photo_url,
+                        title: r.transform.full_name.clone(),
+                        video_duration: None,
+                        video_height: None,
+                        video_width: None,
+                        description: Some(r.result.clone()),
+                        caption: None,
+                        parse_mode: None,
+                        reply_markup: None,
+                        input_message_content: Some(InputMessageContent::from(
+                            InputTextMessageContent {
+                                message_text: r.result,
+                                parse_mode: Some(ParseMode::Markdown),
+                                disable_web_page_preview: false,
+                            },
+                        )),
+                    }));
+                }
             }
 
             // Store query details before it's sent off, in case something goes wrong
