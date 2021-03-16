@@ -9,11 +9,11 @@ pub struct TransformEntry {
     pub full_name: String,
     pub idx: usize,
 
-    transform: Box<dyn Transform>,
+    transform: Box<dyn Transform + Send + Sync>,
 }
 
 impl TransformEntry {
-    pub fn new(idx: usize, name: &str, transform: Box<dyn Transform>) -> Self {
+    pub fn new(idx: usize, name: &str, transform: Box<dyn Transform + Send + Sync>) -> Self {
         let full_name = name;
         let name = full_name
             .replace("(", "")
