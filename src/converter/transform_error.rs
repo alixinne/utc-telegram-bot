@@ -1,7 +1,7 @@
-use failure::Fail;
+use thiserror::Error;
 
-#[derive(Fail, Debug, Eq, PartialEq, Clone)]
+#[derive(Error, Debug, Eq, PartialEq, Clone)]
 pub enum TransformError {
-    #[fail(display = "the transform {} doesn't exist", 0)]
+    #[error("the transform `{0}` doesn't exist")]
     TransformNotFound(String),
 }

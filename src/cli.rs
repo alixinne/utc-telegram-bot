@@ -1,22 +1,27 @@
 use structopt::StructOpt;
+use thiserror::Error;
 
 #[cfg(feature = "renderer")]
 mod generate_images;
 mod run;
 
-#[cfg(feature = "renderer")]
-pub async fn dispatch(opt: Opt) -> Result<(), failure::Error> {
-    Ok(match opt {
-        Opt::Run(run_opts) => run::run(run_opts).await?,
+#[derive(Error, Debug)]
+pub enum CliError {
+    #[cfg(feature = "renderer")]
+    #[error(transparent)]
+    Renderer(#[from] generate_images::GenerateImagesError),
+    #[error(transparent)]
+    Run(#[from] run::RunError),
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
+}
+
+pub async fn dispatch(opt: Opt) -> Result<(), CliError> {
+    match opt {
+        #[cfg(feature = "renderer")]
         Opt::GenerateImages(generate_image_opts) => {
             generate_images::generate_images(generate_image_opts).await?
         }
-    })
-}
-
-#[cfg(not(feature = "renderer"))]
-pub async fn dispatch(opt: Opt) -> Result<(), failure::Error> {
-    match opt {
         Opt::Run(run_opts) => run::run(run_opts).await?,
     }
 

@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 use structopt::StructOpt;
+use thiserror::Error;
 
 use crate::{converter, renderer, renderer::Renderer};
 
@@ -11,7 +12,10 @@ pub struct GenerateImagesOpts {
     output: PathBuf,
 }
 
-pub async fn generate_images(opt: GenerateImagesOpts) -> Result<(), failure::Error> {
+#[derive(Error, Debug)]
+pub enum GenerateImagesError {}
+
+pub async fn generate_images(opt: GenerateImagesOpts) -> Result<(), GenerateImagesError> {
     let renderer = renderer::new_cairo();
     for transform in converter::TransformList::new().transforms() {
         debug!("rendering image for {}", transform.full_name);

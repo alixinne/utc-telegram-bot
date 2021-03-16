@@ -2,6 +2,7 @@ use futures::StreamExt;
 use rand::Rng;
 use structopt::StructOpt;
 use telegram_bot::*;
+use thiserror::Error;
 
 use crate::converter;
 
@@ -44,7 +45,13 @@ fn parse_message(msg: &str) -> (Option<String>, Option<String>) {
     (None, None)
 }
 
-pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
+#[derive(Error, Debug)]
+pub enum RunError {
+    #[error(transparent)]
+    Telegram(#[from] telegram_bot::Error),
+}
+
+pub async fn run(opt: RunOpts) -> Result<(), RunError> {
     let api = Api::new(opt.token);
 
     // Load transforms
