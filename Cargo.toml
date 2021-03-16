@@ -9,9 +9,9 @@ heck = "0.3"
 thiserror = "1.0"
 log = "0.4"
 env_logger = "0.8"
-tokio = { version = "0.2.25", features = ["macros", "rt-threaded"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 futures = "0.3"
-telegram-bot = "0.8"
+telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = "07a9f9a1" }
 fuzzy-matcher = "0.3"
 rand = { version = "0.8", default-features = false, features = ["std", "small_rng"] }
 paw = "1.0"
