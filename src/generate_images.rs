@@ -3,7 +3,10 @@ use std::path::PathBuf;
 use structopt::StructOpt;
 use thiserror::Error;
 
-use crate::{converter, renderer, renderer::Renderer};
+use crate::converter;
+
+mod renderer;
+use renderer::Renderer;
 
 #[derive(StructOpt)]
 #[structopt()]
