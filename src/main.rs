@@ -11,10 +11,22 @@ mod run;
 
 #[derive(StructOpt)]
 #[structopt()]
-pub enum Opt {
+pub enum Command {
     #[cfg(feature = "renderer")]
+    /// Generate thumbnails for the inline query menu
     GenerateImages(generate_images::GenerateImagesOpts),
+    /// Run the bot daemon
     Run(run::RunOpts),
+}
+
+#[derive(StructOpt)]
+pub struct Opt {
+    /// Increase logging verbosity
+    #[structopt(short, long, parse(from_occurrences))]
+    verbose: u32,
+    /// Command to run
+    #[structopt(subcommand)]
+    command: Command,
 }
 
 #[derive(Error, Debug)]
@@ -32,14 +44,29 @@ pub enum CliError {
 #[tokio::main(flavor = "current_thread")]
 pub async fn main(opt: Opt) -> Result<(), CliError> {
     // Initialize logger
-    env_logger::init();
+    env_logger::Builder::from_env(
+        env_logger::Env::new()
+            .filter_or(
+                "UTC_TELEGRAM_BOT_LOG",
+                match opt.verbose {
+                    0 => "warn",
+                    1 => "info",
+                    2 => "debug",
+                    _ => "trace",
+                },
+            )
+            .write_style("UTC_TELEGRAM_BOT_LOG_STYLE"),
+    )
+    .format_timestamp(None)
+    .try_init()
+    .ok();
 
-    match opt {
+    match opt.command {
         #[cfg(feature = "renderer")]
-        Opt::GenerateImages(generate_image_opts) => {
+        Command::GenerateImages(generate_image_opts) => {
             generate_images::generate_images(generate_image_opts).await?
         }
-        Opt::Run(run_opts) => run::run(run_opts).await?,
+        Command::Run(run_opts) => run::run(run_opts).await?,
     }
 
     Ok(())
