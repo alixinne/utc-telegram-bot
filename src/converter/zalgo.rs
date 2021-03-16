@@ -72,19 +72,19 @@ impl ZalgoPreset {
     fn get_nums(&self, rng: &mut impl Rng) -> (u32, u32, u32) {
         match self {
             Self::Mini => (
-                rng.gen_range(0, 8),
-                rng.gen_range(0, 2),
-                rng.gen_range(0, 8),
+                rng.gen_range(0..8),
+                rng.gen_range(0..2),
+                rng.gen_range(0..8),
             ),
             Self::Normal => (
-                rng.gen_range(1, 9),
-                rng.gen_range(0, 3),
-                rng.gen_range(1, 9),
+                rng.gen_range(1..9),
+                rng.gen_range(0..3),
+                rng.gen_range(1..9),
             ),
             Self::Maxi => (
-                rng.gen_range(3, 19),
-                rng.gen_range(0, 3),
-                rng.gen_range(3, 19),
+                rng.gen_range(3..19),
+                rng.gen_range(0..3),
+                rng.gen_range(3..19),
             ),
         }
     }
@@ -113,19 +113,19 @@ impl Transformer<'_> for ZalgoTransformer<'_> {
 
             if self.zalgo.zalgo_up {
                 for _ in 0..num_up {
-                    dest.push(ZALGO_UP[self.rng.gen_range(0, ZALGO_UP.len())]);
+                    dest.push(ZALGO_UP[self.rng.gen_range(0..ZALGO_UP.len())]);
                 }
             }
 
             if self.zalgo.zalgo_mid {
                 for _ in 0..num_mid {
-                    dest.push(ZALGO_MID[self.rng.gen_range(0, ZALGO_MID.len())]);
+                    dest.push(ZALGO_MID[self.rng.gen_range(0..ZALGO_MID.len())]);
                 }
             }
 
             if self.zalgo.zalgo_down {
                 for _ in 0..num_down {
-                    dest.push(ZALGO_DOWN[self.rng.gen_range(0, ZALGO_DOWN.len())]);
+                    dest.push(ZALGO_DOWN[self.rng.gen_range(0..ZALGO_DOWN.len())]);
                 }
             }
         }

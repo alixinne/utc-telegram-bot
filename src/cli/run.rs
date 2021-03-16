@@ -99,10 +99,15 @@ pub async fn run(opt: RunOpts) -> Result<(), failure::Error> {
 
                 let mut results = vec![];
                 for r in matches {
-                    let id: String = std::iter::repeat(())
-                        .map(|()| rng.sample(rand::distributions::Alphanumeric))
-                        .take(16)
-                        .collect();
+                    // safety: we only generate alphanumeric chars, they are valid UTF-8
+                    let id: String = unsafe {
+                        String::from_utf8_unchecked(
+                            std::iter::repeat(())
+                                .map(|()| rng.sample(rand::distributions::Alphanumeric))
+                                .take(16)
+                                .collect(),
+                        )
+                    };
 
                     let photo_url = opt.image_url.clone() + &r.transform.short_name + ".jpg";
 

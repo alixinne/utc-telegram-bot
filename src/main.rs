@@ -7,7 +7,7 @@ mod converter;
 mod renderer;
 
 #[paw::main]
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main(opt: cli::Opt) -> Result<(), failure::Error> {
     // Initialize logger
     env_logger::init();
