@@ -1,12 +1,15 @@
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 
 use futures::StreamExt;
 use rand::{Rng, SeedableRng};
 use structopt::StructOpt;
 use telegram_bot::*;
 use thiserror::Error;
+use tokio::sync::Mutex;
 
 use crate::converter;
+
+mod db;
 
 #[derive(StructOpt)]
 #[structopt()]
@@ -16,6 +19,9 @@ pub struct RunOpts {
 
     #[structopt(long, env = "IMAGES_BASE_URL")]
     image_url: String,
+
+    #[structopt(long, env = "DATABASE_URL")]
+    database_url: String,
 }
 
 fn parse_message(msg: &str) -> (Option<String>, Option<String>) {
@@ -56,16 +62,21 @@ struct Context {
     opt: RunOpts,
     /// Transform list
     transforms: converter::TransformList,
+    /// Database interface
+    db: Mutex<db::Db>,
 }
 
 impl Context {
-    pub fn new(opt: RunOpts) -> Self {
-        Self {
+    pub async fn new(opt: RunOpts) -> Result<Self, RunError> {
+        let db = db::Db::new(&opt.database_url).await?;
+
+        Ok(Self {
             api: Api::new(&opt.token),
             rng: Mutex::new(rand::rngs::StdRng::from_entropy()),
             opt,
             transforms: converter::TransformList::new(),
-        }
+            db: tokio::sync::Mutex::new(db),
+        })
     }
 
     pub fn stream(&self) -> telegram_bot::UpdatesStream {
@@ -107,7 +118,17 @@ async fn handle_request(
             }
         }
         UpdateKind::InlineQuery(query) => {
-            trace!("<{:?}>: inline query: `{:?}`", &query.from.username, query);
+            trace!("<{:?}>: inline query: `{:?}`", query.from, query);
+
+            {
+                let mut db = ctx.db.lock().await;
+                if let Err(error) = db.record_query(&query).await {
+                    error!(
+                        "<{:?}>: failed saving details to database: {:?}",
+                        query.from, error
+                    );
+                }
+            }
 
             let mut results = vec![];
 
@@ -140,7 +161,7 @@ async fn handle_request(
                 // Compute result set
                 for r in matches {
                     let id = {
-                        let mut rng = ctx.rng.lock().unwrap();
+                        let mut rng = ctx.rng.lock().await;
 
                         // safety: we only generate alphanumeric chars, they are valid UTF-8
                         unsafe {
@@ -208,13 +229,15 @@ async fn handle_request(
 
 #[derive(Error, Debug)]
 pub enum RunError {
-    #[error(transparent)]
+    #[error("database error: {0}")]
+    Db(#[from] db::Error),
+    #[error("telegram api error: {0}")]
     Telegram(#[from] telegram_bot::Error),
 }
 
 pub async fn run(opt: RunOpts) -> Result<(), RunError> {
     // Context for request handling
-    let ctx = Arc::new(Context::new(opt));
+    let ctx = Arc::new(Context::new(opt).await?);
 
     // Fetch new updates via long poll method
     let mut stream = ctx.stream();

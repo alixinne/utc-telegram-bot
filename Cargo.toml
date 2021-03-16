@@ -24,6 +24,9 @@ pango = { version = "0.9", optional = true }
 crc = "1.8"
 lazy_static = "1.4"
 
+sqlx = { version = "0.5", features = ["runtime-tokio-rustls", "sqlite", "macros", "migrate", "chrono"] }
+chrono = "0.4"
+
 [features]
 default = []
 renderer = ["image", "cairo-rs", "pangocairo", "pango"]
