@@ -41,7 +41,7 @@ pub enum CliError {
 }
 
 #[paw::main]
-#[tokio::main(flavor = "multi_thread", worker_threads = 2)]
+#[tokio::main(core_threads = 2)]
 pub async fn main(opt: Opt) -> Result<(), CliError> {
     // Initialize logger
     env_logger::Builder::from_env(
