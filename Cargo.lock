@@ -1707,6 +1707,7 @@ checksum = "55937e1799185b12863d447f42597ed69d9928686b8d88a1df17376a097d8369"
 [[package]]
 name = "telegram-bot"
 version = "0.9.0"
+source = "git+https://github.com/vtavernier/telegram-bot.git?branch=master#a0d891e2c8ef5f60b1c75b0ff0a709f3b691fc4d"
 dependencies = [
  "bytes",
  "futures",
@@ -1722,6 +1723,7 @@ dependencies = [
 [[package]]
 name = "telegram-bot-raw"
 version = "0.9.0"
+source = "git+https://github.com/vtavernier/telegram-bot.git?branch=master#a0d891e2c8ef5f60b1c75b0ff0a709f3b691fc4d"
 dependencies = [
  "bytes",
  "serde",

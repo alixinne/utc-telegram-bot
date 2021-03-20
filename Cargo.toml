@@ -31,3 +31,6 @@ tracing = "0.1"
 [features]
 default = []
 renderer = ["image", "cairo-rs", "pangocairo", "pango"]
+
+[patch."https://github.com/telegram-rs/telegram-bot.git"]
+telegram-bot = { git = "https://github.com/vtavernier/telegram-bot.git", branch = "master" }
