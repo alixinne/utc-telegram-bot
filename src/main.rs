@@ -1,8 +1,9 @@
 #[macro_use]
-extern crate log;
+extern crate tracing;
 
 use structopt::StructOpt;
 use thiserror::Error;
+use tracing_subscriber::util::SubscriberInitExt;
 
 mod converter;
 #[cfg(feature = "renderer")]
@@ -43,23 +44,26 @@ pub enum CliError {
 #[paw::main]
 #[tokio::main(worker_threads = 2)]
 pub async fn main(opt: Opt) -> Result<(), CliError> {
-    // Initialize logger
-    env_logger::Builder::from_env(
-        env_logger::Env::new()
-            .filter_or(
-                "UTC_TELEGRAM_BOT_LOG",
-                match opt.verbose {
-                    0 => "utc_telegram_bot=warn",
-                    1 => "utc_telegram_bot=info",
-                    2 => "utc_telegram_bot=debug",
-                    _ => "utc_telegram_bot=trace",
+    tracing_subscriber::fmt()
+        .with_env_filter(
+            tracing_subscriber::EnvFilter::try_from_env("UTC_TELEGRAM_BOT_LOG").unwrap_or_else(
+                |_| {
+                    tracing_subscriber::EnvFilter::from_default_env().add_directive(
+                        match opt.verbose {
+                            0 => "utc_telegram_bot=warn",
+                            1 => "utc_telegram_bot=info",
+                            2 => "utc_telegram_bot=debug",
+                            _ => "utc_telegram_bot=trace",
+                        }
+                        .parse()
+                        .unwrap(),
+                    )
                 },
-            )
-            .write_style("UTC_TELEGRAM_BOT_LOG_STYLE"),
-    )
-    .format_timestamp(None)
-    .try_init()
-    .ok();
+            ),
+        )
+        .without_time()
+        .finish()
+        .init();
 
     match opt.command {
         #[cfg(feature = "renderer")]
