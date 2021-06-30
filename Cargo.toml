@@ -9,7 +9,7 @@ heck = "0.3"
 thiserror = "1.0"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 futures = "0.3"
-telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = "07a9f9a1" }
+telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = "65ad5cf" }
 fuzzy-matcher = "0.3"
 rand = { version = "0.8", default-features = false, features = ["std", "small_rng"] }
 paw = "1.0"
@@ -31,6 +31,3 @@ tracing = "0.1"
 [features]
 default = []
 renderer = ["image", "cairo-rs", "pangocairo", "pango"]
-
-[patch."https://github.com/telegram-rs/telegram-bot.git"]
-telegram-bot = { git = "https://github.com/vtavernier/telegram-bot.git", branch = "master" }
