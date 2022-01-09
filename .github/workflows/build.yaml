@@ -58,7 +58,9 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v2
         with:
-          tags: ${{ steps.image.outputs.ghcr }}:${{ steps.image.outputs.label }}
+          tags: |
+            ${{ steps.image.outputs.ghcr }}:${{ steps.image.outputs.label }}
+            ${{ steps.image.outputs.ghcr_tag }}
           push: ${{ steps.image.outputs.push }}
 
       # On master, actually run semantic release
