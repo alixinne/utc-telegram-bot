@@ -136,7 +136,7 @@ impl Transform for Zalgo {
     fn get_transfomer(&'_ self, src: &str) -> Box<dyn Transformer + '_> {
         Box::new(ZalgoTransformer::new(
             self,
-            crc::crc64::checksum_ecma(src.as_bytes()),
+            crc::Crc::<u64>::new(&crc::CRC_64_ECMA_182).checksum(src.as_bytes()),
         ))
     }
 }
