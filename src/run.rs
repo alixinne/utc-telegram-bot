@@ -17,10 +17,14 @@ pub struct RunOpts {
     #[structopt(short, long, env = "TELEGRAM_BOT_TOKEN")]
     token: String,
 
-    #[structopt(long, env = "IMAGES_BASE_URL")]
-    image_url: String,
+    #[structopt(long, env = "IMAGES_BASE_URL", default_value = "localhost:3000/images")]
+    images_url: String,
 
-    #[structopt(long, env = "DATABASE_URL")]
+    #[structopt(
+        long,
+        env = "DATABASE_URL",
+        default_value = "sqlite:utc-telegram-bot.db"
+    )]
     database_url: String,
 }
 
@@ -174,7 +178,7 @@ async fn handle_request(
                         }
                     };
 
-                    let photo_url = opt.image_url.clone() + &r.transform.short_name + ".jpg";
+                    let photo_url = opt.images_url.clone() + &r.transform.short_name + ".jpg";
 
                     results.push(InlineQueryResult::from(InlineQueryResultVideo {
                         id,
