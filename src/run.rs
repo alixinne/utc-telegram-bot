@@ -259,7 +259,14 @@ pub async fn run(opt: RunOpts) -> Result<(), RunError> {
                 });
             }
             Err(error) => {
-                error!("error decoding update: {:?}", error);
+                // TODO: Make a PR to telegram-bot to allow returning internal errors
+                let error_string = error.to_string();
+                if error_string == "Unauthorized" {
+                    // Invalid token, this is a permanent error
+                    return Err(error.into());
+                } else {
+                    error!("error decoding update: {:?}", error);
+                }
             }
         }
     }
