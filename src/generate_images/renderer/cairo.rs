@@ -9,10 +9,10 @@ impl Renderer {
 
     fn render_map_image(&self, c: &str) -> Vec<u8> {
         let mut surface = cairo::ImageSurface::create(cairo::Format::ARgb32, 128, 128).unwrap();
-        let context = cairo::Context::new(&surface);
+        let context = cairo::Context::new(&surface).expect("failed to create cairo context");
 
         context.set_source_rgb(0.95, 0.95, 0.95);
-        context.paint();
+        context.paint().expect("paint failed");
 
         context.set_source_rgb(0.01, 0.01, 0.01);
 
@@ -24,7 +24,7 @@ impl Renderer {
         layout.set_text(c);
         layout.set_alignment(pango::Alignment::Center);
 
-        let sz = layout.get_pixel_size();
+        let sz = layout.pixel_size();
         context.move_to(64.0 - sz.0 as f64 / 2.0, 64.0 - sz.1 as f64 / 2.0);
         pangocairo::show_layout(&context, &layout);
 
@@ -33,7 +33,7 @@ impl Renderer {
         // Encode it as JPEG
         // TODO: DO not copy here
         let image =
-            image::RgbaImage::from_raw(128, 128, (&*surface.get_data().unwrap()).to_vec()).unwrap();
+            image::RgbaImage::from_raw(128, 128, (&*surface.data().unwrap()).to_vec()).unwrap();
 
         let mut encoded: Vec<u8> = Vec::new();
         image::DynamicImage::ImageRgba8(image)
