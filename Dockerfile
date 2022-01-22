@@ -5,4 +5,5 @@ RUN cargo build --release
 
 FROM gcr.io/distroless/cc
 COPY --from=build /src/target/release/utc-telegram-bot /
+COPY public /public
 ENTRYPOINT ["/utc-telegram-bot"]

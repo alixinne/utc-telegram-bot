@@ -22,6 +22,17 @@ jobs:
             @semantic-release/git
         id: semantic
 
+      # Build thumbnail images
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+      - run: sudo apt-get install -y libpango1.0-dev libcairo2-dev
+      - uses: actions-rs/cargo@v1
+        with:
+          command: run
+          args: --features renderer -- generate-images
+
       # Setup Docker buld action
       - name: Set up Docker Buildx
         id: buildx
