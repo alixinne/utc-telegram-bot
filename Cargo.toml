@@ -7,7 +7,7 @@ edition = "2018"
 [dependencies]
 heck = "0.4"
 thiserror = "1.0"
-tokio = { version = "1.15", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.15", features = ["macros", "rt-multi-thread", "net"] }
 futures = "0.3"
 telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = "65ad5cf" }
 fuzzy-matcher = "0.3"
@@ -27,6 +27,8 @@ chrono = "0.4"
 
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tracing = "0.1"
+
+warp = "0.3"
 
 [features]
 default = []

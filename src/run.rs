@@ -1,3 +1,4 @@
+use std::path::PathBuf;
 use std::sync::Arc;
 
 use futures::StreamExt;
@@ -10,6 +11,7 @@ use tokio::sync::Mutex;
 use crate::converter;
 
 mod db;
+mod web;
 
 #[derive(StructOpt)]
 #[structopt()]
@@ -26,6 +28,12 @@ pub struct RunOpts {
         default_value = "sqlite:utc-telegram-bot.db"
     )]
     database_url: String,
+
+    #[structopt(short, long, default_value = "localhost:3000")]
+    bind: String,
+
+    #[structopt(short, long, default_value = "public")]
+    serve_root: PathBuf,
 }
 
 fn parse_message(msg: &str) -> (Option<String>, Option<String>) {
@@ -237,9 +245,29 @@ pub enum RunError {
     Db(#[from] db::Error),
     #[error("telegram api error: {0}")]
     Telegram(#[from] telegram_bot::Error),
+    #[error("web server error: {0}")]
+    Web(#[from] web::Error),
 }
 
 pub async fn run(opt: RunOpts) -> Result<(), RunError> {
+    // Spawn web server
+    let _server = tokio::spawn({
+        // Bind the server first
+        let fut = web::run(&opt).await?;
+
+        // Then run it
+        async move {
+            match fut.await {
+                Ok(_) => {
+                    debug!("web server terminated");
+                }
+                Err(err) => {
+                    error!("error running web server: {:?}", err);
+                }
+            }
+        }
+    });
+
     // Context for request handling
     let ctx = Arc::new(Context::new(opt).await?);
 
