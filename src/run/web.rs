@@ -1,4 +1,4 @@
-use futures::Future;
+use futures::{channel::oneshot, Future};
 use thiserror::Error;
 use tokio::net;
 use warp::Filter;
@@ -15,7 +15,13 @@ pub enum Error {
 
 pub async fn run(
     opts: &RunOpts,
-) -> Result<impl Future<Output = Result<(), Error>> + 'static, Error> {
+) -> Result<
+    (
+        impl Future<Output = Result<(), Error>> + 'static,
+        oneshot::Sender<()>,
+    ),
+    Error,
+> {
     // Get the bind address
     let bind = net::lookup_host(&opts.bind)
         .await
@@ -23,14 +29,22 @@ pub async fn run(
         .and_then(|mut it| it.next())
         .ok_or_else(|| Error::InvalidBindAddr(opts.bind.clone()))?;
 
+    let (tx, rx) = oneshot::channel();
+
     let routes = warp::fs::dir(opts.serve_root.clone()).or(warp::path("healthz").map(warp::reply));
 
     // Bind the server to the address
-    let (addr, server) = warp::serve(routes).try_bind_ephemeral(bind)?;
+    let (addr, server) = warp::serve(routes).try_bind_with_graceful_shutdown(bind, async {
+        rx.await.ok();
+    })?;
+
     tracing::info!("listening on http://{}", addr);
 
-    Ok(async move {
-        server.await;
-        Ok(())
-    })
+    Ok((
+        async move {
+            server.await;
+            Ok(())
+        },
+        tx,
+    ))
 }

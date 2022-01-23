@@ -1,13 +1,13 @@
 [package]
 name = "utc-telegram-bot"
-version = "1.1.0"
+version = "1.1.1"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
 
 [dependencies]
 heck = "0.4"
 thiserror = "1.0"
-tokio = { version = "1.15", features = ["macros", "rt-multi-thread", "net"] }
+tokio = { version = "1.15", features = ["macros", "rt-multi-thread", "net", "signal"] }
 futures = "0.3"
 telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = "65ad5cf" }
 fuzzy-matcher = "0.3"

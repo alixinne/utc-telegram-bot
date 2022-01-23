@@ -1,12 +1,12 @@
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use futures::StreamExt;
+use futures::{channel::oneshot, StreamExt};
 use rand::{Rng, SeedableRng};
 use structopt::StructOpt;
 use telegram_bot::*;
 use thiserror::Error;
-use tokio::sync::Mutex;
+use tokio::{signal::unix::SignalKind, sync::Mutex};
 
 use crate::converter;
 
@@ -247,33 +247,24 @@ pub enum RunError {
     Telegram(#[from] telegram_bot::Error),
     #[error("web server error: {0}")]
     Web(#[from] web::Error),
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
 }
 
-pub async fn run(opt: RunOpts) -> Result<(), RunError> {
-    // Spawn web server
-    let _server = tokio::spawn({
-        // Bind the server first
-        let fut = web::run(&opt).await?;
-
-        // Then run it
-        async move {
-            match fut.await {
-                Ok(_) => {
-                    debug!("web server terminated");
-                }
-                Err(err) => {
-                    error!("error running web server: {:?}", err);
-                }
-            }
-        }
-    });
-
-    // Context for request handling
-    let ctx = Arc::new(Context::new(opt).await?);
+async fn process_updates(ctx: Arc<Context>) -> Result<(), RunError> {
+    // Declare SIGTERM handle
+    let mut handler = tokio::signal::unix::signal(SignalKind::terminate())?;
 
     // Fetch new updates via long poll method
     let mut stream = ctx.stream();
-    while let Some(update) = stream.next().await {
+
+    while let Some(update) = tokio::select! {
+        update = stream.next() => update,
+        _ = handler.recv() => {
+            info!("got SIGTERM, terminating");
+            return Ok(());
+        }
+    } {
         match update {
             Ok(update) => {
                 tokio::spawn({
@@ -302,6 +293,41 @@ pub async fn run(opt: RunOpts) -> Result<(), RunError> {
             }
         }
     }
+
+    Ok(())
+}
+
+pub async fn run(opt: RunOpts) -> Result<(), RunError> {
+    // Spawn web server
+    let (server, cancel) = web::run(&opt).await?;
+    let _server = tokio::spawn(async move {
+        match server.await {
+            Ok(_) => {
+                debug!("web server terminated");
+            }
+            Err(err) => {
+                error!("error running web server: {:?}", err);
+            }
+        }
+    });
+
+    // Guard web server for termination
+    struct Guard(Option<oneshot::Sender<()>>);
+
+    impl Drop for Guard {
+        fn drop(&mut self) {
+            self.0.take().and_then(|tx| tx.send(()).ok());
+        }
+    }
+
+    // Instantiate guard
+    let _cancel = Guard(Some(cancel));
+
+    // Context for request handling
+    let ctx = Arc::new(Context::new(opt).await?);
+
+    // Process incoming updates
+    process_updates(ctx).await?;
 
     Ok(())
 }
