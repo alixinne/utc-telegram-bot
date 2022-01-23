@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/vtavernier/utc-telegram-bot/compare/v1.1.0...v1.1.1) (2022-01-23)
+
+
+### Bug Fixes
+
+* terminate gracefully on SIGTERM ([fec0acd](https://github.com/vtavernier/utc-telegram-bot/commit/fec0acd0aac7f8ead72043a7744dd7049f114ae1))
+
 # [1.1.0](https://github.com/vtavernier/utc-telegram-bot/compare/v1.0.0...v1.1.0) (2022-01-22)
 
 
