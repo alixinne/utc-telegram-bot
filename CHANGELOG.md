@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/vtavernier/utc-telegram-bot/compare/v1.1.1...v1.1.2) (2022-02-11)
+
+
+### Bug Fixes
+
+* add fonts-dejavu in CI builds ([7ad8de7](https://github.com/vtavernier/utc-telegram-bot/commit/7ad8de7b8a9cb012ab558c40ac6ea525a5cdf3c5))
+
 ## [1.1.1](https://github.com/vtavernier/utc-telegram-bot/compare/v1.1.0...v1.1.1) (2022-01-23)
 
 
