@@ -28,7 +28,7 @@ jobs:
         with:
           profile: minimal
           toolchain: stable
-      - run: sudo apt-get install -y libpango1.0-dev libcairo2-dev
+      - run: sudo apt-get install -y libpango1.0-dev libcairo2-dev fonts-dejavu
       - uses: actions-rs/cargo@v1
         with:
           command: run
