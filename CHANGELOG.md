@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/vtavernier/utc-telegram-bot/compare/v1.1.2...v1.1.3) (2022-02-12)
+
+
+### Bug Fixes
+
+* add extra fonts in CI builds ([3c6d80d](https://github.com/vtavernier/utc-telegram-bot/commit/3c6d80d17efb42ccadb5c750f662f73a759b7c76))
+
 ## [1.1.2](https://github.com/vtavernier/utc-telegram-bot/compare/v1.1.1...v1.1.2) (2022-02-11)
 
 
