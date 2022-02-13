@@ -23,12 +23,18 @@ jobs:
             @semantic-release/git
         id: semantic
 
+      # Bump version according to semantic release
+      - name: Bump crate version
+        run: ./ci/setversion.sh ${{ steps.semantic.outputs.new_release_version }}
+        if: steps.semantic.outputs.new_release_published == 'true'
+
       # Build thumbnail images
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
-      - run: >
+      - name: Install thumbnail build dependencies
+        run: >
           sudo apt-get install -y libpango1.0-dev libcairo2-dev
           fontconfig fontconfig-config fonts-dejavu fonts-freefont-ttf
           fonts-urw-base35 fonts-indic fonts-kacst-one fonts-khmeros-core
@@ -36,10 +42,11 @@ jobs:
           fonts-noto-cjk fonts-noto-color-emoji fonts-opensymbol
           fonts-sil-abyssinica fonts-sil-padauk fonts-thai-tlwg
           fonts-tibetan-machine fonts-ubuntu
-      - uses: actions-rs/cargo@v1
+      - name: Generate thumbnails
+        uses: actions-rs/cargo@v1
         with:
           command: run
-          args: --features renderer -- generate-images
+          args: --features renderer -- -vvv generate-images
 
       # Setup Docker buld action
       - name: Set up Docker Buildx
@@ -93,4 +100,4 @@ jobs:
           extra_plugins: |
             @semantic-release/changelog
             @semantic-release/git
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
