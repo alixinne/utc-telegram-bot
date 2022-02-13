@@ -28,11 +28,15 @@ jobs:
         run: ./ci/setversion.sh ${{ steps.semantic.outputs.new_release_version }}
         if: steps.semantic.outputs.new_release_published == 'true'
 
-      # Build thumbnail images
+      # Setup toolchain
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
+
+      - uses: Swatinem/rust-cache@v1
+
+      # Build thumbnail images
       - name: Install thumbnail build dependencies
         run: >
           sudo apt-get install -y libpango1.0-dev libcairo2-dev
