@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/vtavernier/utc-telegram-bot/compare/v1.1.3...v1.2.0) (2022-02-13)
+
+
+### Features
+
+* add image manifest and cache invalidation hash ([4b4e22b](https://github.com/vtavernier/utc-telegram-bot/commit/4b4e22b58998b5b6406ea5c9c4ef8d087bad5d3f))
+
 ## [1.1.3](https://github.com/vtavernier/utc-telegram-bot/compare/v1.1.2...v1.1.3) (2022-02-12)
 
 
