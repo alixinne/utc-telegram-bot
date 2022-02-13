@@ -8,6 +8,7 @@ use tracing_subscriber::util::SubscriberInitExt;
 mod converter;
 #[cfg(feature = "renderer")]
 mod generate_images;
+mod manifest;
 mod run;
 
 #[derive(StructOpt)]

@@ -8,7 +8,7 @@ use telegram_bot::*;
 use thiserror::Error;
 use tokio::{signal::unix::SignalKind, sync::Mutex};
 
-use crate::converter;
+use crate::{converter, manifest::Manifest};
 
 mod db;
 mod web;
@@ -76,11 +76,17 @@ struct Context {
     transforms: converter::TransformList,
     /// Database interface
     db: Mutex<db::Db>,
+    /// Image manifest
+    manifest: Manifest,
 }
 
 impl Context {
     pub async fn new(opt: RunOpts) -> Result<Self, RunError> {
         let db = db::Db::new(&opt.database_url).await?;
+
+        // Try loading an image manifest
+        let manifest =
+            Manifest::load(opt.serve_root.join("images/.manifest.json")).unwrap_or_default();
 
         Ok(Self {
             api: Api::new(&opt.token),
@@ -88,6 +94,7 @@ impl Context {
             opt,
             transforms: converter::TransformList::new(),
             db: tokio::sync::Mutex::new(db),
+            manifest,
         })
     }
 
@@ -186,7 +193,14 @@ async fn handle_request(
                         }
                     };
 
-                    let photo_url = opt.images_url.clone() + &r.transform.short_name + ".jpg";
+                    // Compute photo url with added hash
+                    let filename = r.transform.short_name.clone() + ".jpg";
+                    let mut photo_url = opt.images_url.clone() + &filename;
+
+                    if let Some(hash) = ctx.manifest.hash(&filename) {
+                        photo_url.push('?');
+                        photo_url.extend(hash.chars().take(12));
+                    }
 
                     results.push(InlineQueryResult::from(InlineQueryResultVideo {
                         id,
