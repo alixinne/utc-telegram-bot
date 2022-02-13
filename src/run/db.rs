@@ -1,21 +1,30 @@
-use sqlx::{sqlite::SqliteConnection, Connection};
+use std::str::FromStr;
+
+use sqlx::{sqlite::SqliteConnectOptions, SqlitePool};
 use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum Error {
     #[error(transparent)]
     Sqlx(#[from] sqlx::Error),
+    #[error(transparent)]
+    Migrate(#[from] sqlx::migrate::MigrateError),
 }
 
 pub struct Db {
-    conn: SqliteConnection,
+    pool: SqlitePool,
 }
 
 impl Db {
     pub async fn new(database_url: &str) -> Result<Self, Error> {
-        Ok(Self {
-            conn: SqliteConnection::connect(database_url).await?,
-        })
+        let pool = SqlitePool::connect_with(
+            SqliteConnectOptions::from_str(database_url)?.create_if_missing(true),
+        )
+        .await?;
+
+        sqlx::migrate!("./migrations").run(&pool).await?;
+
+        Ok(Self { pool })
     }
 
     pub async fn record_query(&mut self, query: &telegram_bot::InlineQuery) -> Result<(), Error> {
@@ -49,7 +58,7 @@ impl Db {
         .bind(1)
         .bind(chrono::Utc::now())
         .bind(chrono::Utc::now())
-        .execute(&mut self.conn)
+        .execute(&mut self.pool.acquire().await?)
         .await?;
 
         Ok(())

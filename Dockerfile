@@ -9,7 +9,8 @@ RUN mkdir -p src && \
     cargo build --release
 
 # Deploy code
-COPY migrations alphabets.txt /src/
+COPY alphabets.txt /src/
+COPY migrations /src/migrations
 COPY src /src/src
 RUN cargo build --release
 
