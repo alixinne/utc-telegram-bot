@@ -1,0 +1,35 @@
+name: pullrequest-branch
+
+on:
+  pull_request_target:
+    types: [opened, edited]
+
+jobs:
+  check-branch:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Vankka/pr-target-branch-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          target: master
+          exclude: dev # Don't prevent going from dev -> master
+          change-to: dev
+          comment: |
+            Your PR was set to target `master`, PRs should be target `dev`
+            The base branch of this PR has been automatically changed to `dev`, please check that there are no merge conflicts
+
+  check-branch-dependabot:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Vankka/pr-target-branch-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          target: master
+          exclude: dev # Don't prevent going from dev -> master
+          change-to: dev
+          comment: |
+            @dependabot rebase
