@@ -1,0 +1,31 @@
+[tasks.generate-images]
+command = "cargo"
+args = [
+  "run",
+  "--features",
+  "renderer",
+  "--",
+  "-vvv",
+  "generate-images"
+]
+
+[tasks.ci-bump-version]
+command = "./ci/setversion.sh"
+args = ["${1}"]
+
+[tasks.ci-install-deps]
+script = '''
+sudo apt-get install -y libpango1.0-dev libcairo2-dev \
+  fontconfig fontconfig-config fonts-dejavu fonts-freefont-ttf \
+  fonts-urw-base35 fonts-indic fonts-kacst-one fonts-khmeros-core \
+  fonts-lao fonts-liberation fonts-liberation2 fonts-lklug-sinhala \
+  fonts-noto-cjk fonts-noto-color-emoji fonts-opensymbol \
+  fonts-sil-abyssinica fonts-sil-padauk fonts-thai-tlwg \
+  fonts-tibetan-machine fonts-ubuntu
+'''
+
+[tasks.ci-pre-docker]
+dependencies = [
+  "ci-install-deps",
+  "generate-images"
+]
