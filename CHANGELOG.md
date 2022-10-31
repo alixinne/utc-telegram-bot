@@ -1,3 +1,10 @@
+## [1.4.0](https://github.com/vtavernier/utc-telegram-bot/compare/v1.3.0...v1.4.0) (2022-10-31)
+
+
+### Features
+
+* create and migrate database on start ([0654835](https://github.com/vtavernier/utc-telegram-bot/commit/0654835743bcb0aadae9faaef047fc3e1b5e8dad))
+
 ## [1.3.0](https://github.com/vtavernier/utc-telegram-bot/compare/v1.2.0...v1.3.0) (2022-10-31)
 
 
