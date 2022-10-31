@@ -19,7 +19,7 @@ impl Renderer {
         let mut desc = pango::FontDescription::from_string("DejaVu Serif");
         desc.set_size(1024 * 48);
 
-        let layout = pangocairo::create_layout(&context).unwrap();
+        let layout = pangocairo::create_layout(&context);
         layout.set_font_description(Some(&desc));
         layout.set_text(c);
         layout.set_alignment(pango::Alignment::Center);

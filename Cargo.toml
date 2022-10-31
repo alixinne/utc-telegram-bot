@@ -31,8 +31,8 @@ warp = { version = "0.3", optional = true }
 # Image renderer dependencies
 image = { version = "0.23", default-features = false, features = ["jpeg"], optional = true }
 cairo-rs = { version = "0.16", optional = true }
-pangocairo = { version = "0.14", optional = true }
-pango = { version = "0.14", optional = true }
+pangocairo = { version = "0.16", optional = true }
+pango = { version = "0.16", optional = true }
 sha2 = { version = "0.10", optional = true }
 hex = { version = "0.4", optional = true }
 
