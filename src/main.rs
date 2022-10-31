@@ -9,6 +9,7 @@ mod converter;
 #[cfg(feature = "renderer")]
 mod generate_images;
 mod manifest;
+#[cfg(feature = "run")]
 mod run;
 
 #[derive(StructOpt)]
@@ -17,6 +18,7 @@ pub enum Command {
     #[cfg(feature = "renderer")]
     /// Generate thumbnails for the inline query menu
     GenerateImages(generate_images::GenerateImagesOpts),
+    #[cfg(feature = "run")]
     /// Run the bot daemon
     Run(run::RunOpts),
 }
@@ -36,6 +38,7 @@ pub enum CliError {
     #[cfg(feature = "renderer")]
     #[error(transparent)]
     Renderer(#[from] generate_images::GenerateImagesError),
+    #[cfg(feature = "run")]
     #[error(transparent)]
     Run(#[from] run::RunError),
     #[error(transparent)]
@@ -71,6 +74,7 @@ pub async fn main(opt: Opt) -> Result<(), CliError> {
         Command::GenerateImages(generate_image_opts) => {
             generate_images::generate_images(generate_image_opts).await?
         }
+        #[cfg(feature = "run")]
         Command::Run(run_opts) => run::run(run_opts).await?,
     }
 
