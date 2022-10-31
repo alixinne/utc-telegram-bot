@@ -16,8 +16,8 @@ impl TransformEntry {
     pub fn new(idx: usize, name: &str, transform: Box<dyn Transform + Send + Sync>) -> Self {
         let full_name = name;
         let name = full_name
-            .replace("(", "")
-            .replace(")", "")
+            .replace('(', "")
+            .replace(')', "")
             .replace(" pseudoalphabet", "");
         let short_name = name.to_snake_case();
 
