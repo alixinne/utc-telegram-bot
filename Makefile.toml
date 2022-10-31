@@ -2,6 +2,7 @@
 command = "cargo"
 args = [
   "run",
+  "--no-default-features",
   "--features",
   "renderer",
   "--",

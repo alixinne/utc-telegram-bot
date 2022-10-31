@@ -5,36 +5,38 @@ authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+crc = "2.1"
+futures = "0.3"
+fuzzy-matcher = "0.3"
 heck = "0.4"
+lazy_static = "1.4"
+rand = { version = "0.8", default-features = false, features = ["std_rng", "small_rng", "getrandom"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 thiserror = "1.0"
 tokio = { version = "1.15", features = ["macros", "rt-multi-thread", "net", "signal"] }
-futures = "0.3"
-telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = "65ad5cf" }
-fuzzy-matcher = "0.3"
-rand = { version = "0.8", default-features = false, features = ["std_rng", "small_rng", "getrandom"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# CLI features
 paw = "1.0"
 structopt = { version = "0.3", features = ["paw"] }
 
+# Server features
+chrono = { version = "0.4", optional = true }
+sqlx = { version = "0.5", features = ["runtime-tokio-rustls", "sqlite", "macros", "migrate", "chrono"], optional = true }
+telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = "65ad5cf", optional = true }
+warp = { version = "0.3", optional = true }
+
+# Image renderer dependencies
 image = { version = "0.23", default-features = false, features = ["jpeg"], optional = true }
 cairo-rs = { version = "0.14", optional = true }
 pangocairo = { version = "0.14", optional = true }
 pango = { version = "0.14", optional = true }
 sha2 = { version = "0.10", optional = true }
 hex = { version = "0.4", optional = true }
-crc = "2.1"
-lazy_static = "1.4"
-
-sqlx = { version = "0.5", features = ["runtime-tokio-rustls", "sqlite", "macros", "migrate", "chrono"] }
-chrono = "0.4"
-
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-tracing = "0.1"
-
-warp = "0.3"
 
 [features]
-default = []
+default = ["run"]
+run = ["chrono", "sqlx", "telegram-bot", "warp"]
 renderer = ["image", "cairo-rs", "pangocairo", "pango", "sha2", "hex"]
