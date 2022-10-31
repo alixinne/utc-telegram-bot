@@ -284,13 +284,8 @@ async fn process_updates(ctx: Arc<Context>) -> Result<(), RunError> {
                 tokio::spawn({
                     let ctx = ctx.clone();
                     async move {
-                        match handle_request(ctx, update).await {
-                            Err(error) => {
-                                error!("error processing request: {:?}", error);
-                            }
-                            _ => {
-                                // ok, nothing to do
-                            }
+                        if let Err(error) = handle_request(ctx, update).await {
+                            error!("error processing request: {:?}", error);
                         }
                     }
                 });
