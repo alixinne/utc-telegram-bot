@@ -10,13 +10,18 @@ args = [
   "generate-images"
 ]
 
+[tasks.ci-build-deps]
+script = '''
+sudo apt-get install --no-install-recommends -y libpango1.0-dev libcairo2-dev
+'''
+
 [tasks.ci-bump-version]
 command = "./ci/setversion.sh"
 args = ["${1}"]
 
 [tasks.ci-install-deps]
 script = '''
-sudo apt-get install -y libpango1.0-dev libcairo2-dev \
+sudo apt-get install -y \
   fontconfig fontconfig-config fonts-dejavu fonts-freefont-ttf \
   fonts-urw-base35 fonts-indic fonts-kacst-one fonts-khmeros-core \
   fonts-lao fonts-liberation fonts-liberation2 fonts-lklug-sinhala \
@@ -27,10 +32,17 @@ sudo apt-get install -y libpango1.0-dev libcairo2-dev \
 
 [tasks.ci-pre-docker]
 dependencies = [
+  "ci-build-deps",
   "ci-install-deps",
   "generate-images"
 ]
 
+[tasks.ci-pre-check]
+dependencies = [
+  "ci-build-deps",
+]
+
 [tasks.ci-test]
+# We don't need ci-build-deps when testing the run part
 command = "cargo"
 args = ["test"]
