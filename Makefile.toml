@@ -30,3 +30,7 @@ dependencies = [
   "ci-install-deps",
   "generate-images"
 ]
+
+[tasks.ci-test]
+command = "cargo"
+args = ["test"]
