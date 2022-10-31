@@ -1,3 +1,24 @@
+## [1.3.0](https://github.com/vtavernier/utc-telegram-bot/compare/v1.2.0...v1.3.0) (2022-10-31)
+
+
+### Features
+
+* move server functionality to run feature ([545a841](https://github.com/vtavernier/utc-telegram-bot/commit/545a841cd96763e48f5913009222b0b50bcedcf2))
+
+
+### Bug Fixes
+
+* **converter:** fix clippy warnings ([8f51a77](https://github.com/vtavernier/utc-telegram-bot/commit/8f51a7719f3144e9dacd641d4acaa6a744957d74))
+* **run:** fix clippy warnings ([ff8fc2b](https://github.com/vtavernier/utc-telegram-bot/commit/ff8fc2bb71fa8ea9df03703ed0f0b0631d546c55))
+
+
+### Dependencies and Other Build Updates
+
+* **docker:** cache dependencies in separate layer ([d6c8614](https://github.com/vtavernier/utc-telegram-bot/commit/d6c8614ac0a12407daffb9d575e2c28f0a03daf8))
+* set explicit distroless/cc version ([5c5eadb](https://github.com/vtavernier/utc-telegram-bot/commit/5c5eadb864b3f173606024deec879a729e09b43f))
+* set rust-toolchain version to 1.63.0 ([7cbb0a3](https://github.com/vtavernier/utc-telegram-bot/commit/7cbb0a3535f391210f318e4168d544b6186bb2e3))
+* support dependabot updates ([ac8d7ec](https://github.com/vtavernier/utc-telegram-bot/commit/ac8d7ecb78de301563f6bff0b6b5ef160335b962))
+
 # [1.2.0](https://github.com/vtavernier/utc-telegram-bot/compare/v1.1.3...v1.2.0) (2022-02-13)
 
 
