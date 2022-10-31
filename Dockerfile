@@ -1,6 +1,16 @@
 FROM docker.io/library/rust:1.63.0 AS build
+
 WORKDIR /src
-COPY . /src
+
+# Build dependencies
+COPY Cargo.lock Cargo.toml /src/
+RUN mkdir -p src && \
+    echo 'fn main() {}' >src/main.rs && \
+    cargo build --release
+
+# Deploy code
+COPY migrations alphabets.txt /src/
+COPY src /src/src
 RUN cargo build --release
 
 FROM gcr.io/distroless/cc@sha256:3827818d6d0c62a2b03fbced0a0ccd4ffdf98095f4a536fb878d5fc2d8bfb049
