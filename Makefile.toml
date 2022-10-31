@@ -17,7 +17,7 @@ sudo apt-get install --no-install-recommends -y libpango1.0-dev libcairo2-dev
 
 [tasks.ci-bump-version]
 command = "./ci/setversion.sh"
-args = ["${1}"]
+args = ["${@}"]
 
 [tasks.ci-install-deps]
 script = '''
