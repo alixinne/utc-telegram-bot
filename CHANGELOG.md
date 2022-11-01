@@ -1,3 +1,11 @@
+## [1.4.1](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.0...v1.4.1) (2022-11-01)
+
+
+### Dependencies and Other Build Updates
+
+* **deps:** bump cairo-rs from 0.14.9 to 0.16.1 ([171fcd8](https://github.com/vtavernier/utc-telegram-bot/commit/171fcd8ac4cca27d5defdb1746970d5b42e74bba))
+* **deps:** bump structopt from 0.3.25 to 0.3.26 ([6bb0ada](https://github.com/vtavernier/utc-telegram-bot/commit/6bb0adad2cc58172e59f3d607237a170a2829282))
+
 ## [1.4.0](https://github.com/vtavernier/utc-telegram-bot/compare/v1.3.0...v1.4.0) (2022-10-31)
 
 
