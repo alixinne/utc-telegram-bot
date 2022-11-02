@@ -4,3 +4,5 @@
 *.png
 *.jpg
 thumbs/
+public/
+utc-telegram-bot.db
