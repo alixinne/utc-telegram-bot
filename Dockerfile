@@ -12,7 +12,7 @@ RUN mkdir -p src && \
 COPY alphabets.txt /src/
 COPY migrations /src/migrations
 COPY src /src/src
-RUN cargo build --release
+RUN touch -am src/main.rs && cargo build --release
 
 FROM gcr.io/distroless/cc@sha256:3827818d6d0c62a2b03fbced0a0ccd4ffdf98095f4a536fb878d5fc2d8bfb049
 COPY --from=build /src/target/release/utc-telegram-bot /
