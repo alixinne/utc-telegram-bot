@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.1...v1.4.2) (2022-11-03)
+
+
+### Bug Fixes
+
+* **docker:** ensure cargo build actually builds the binary ([5779937](https://github.com/vtavernier/utc-telegram-bot/commit/5779937a968f2505cce662da07749c4181dd0cf2))
+
 ## [1.4.1](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.0...v1.4.1) (2022-11-01)
 
 
