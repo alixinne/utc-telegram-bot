@@ -5,7 +5,7 @@ authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-crc = "2.1"
+crc = "3.0"
 futures = "0.3"
 fuzzy-matcher = "0.3"
 heck = "0.4"
