@@ -1,3 +1,14 @@
+## [1.4.3](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.2...v1.4.3) (2022-11-10)
+
+
+### Dependencies and Other Build Updates
+
+* **deps:** bump chrono from 0.4.19 to 0.4.22 ([c0e9b70](https://github.com/vtavernier/utc-telegram-bot/commit/c0e9b708e2691aa4570f9d0ceac341cf41a5fc6c))
+* **deps:** bump crc from 2.1.0 to 3.0.0 ([3e467fb](https://github.com/vtavernier/utc-telegram-bot/commit/3e467fb34764e80371ad36b42e02268b8860ad8f))
+* **deps:** bump serde_json from 1.0.74 to 1.0.87 ([19683dc](https://github.com/vtavernier/utc-telegram-bot/commit/19683dc5b5d80976d9606b6e038b3e9c8f4a62fa))
+* **deps:** bump thiserror from 1.0.30 to 1.0.37 ([c3cd2f1](https://github.com/vtavernier/utc-telegram-bot/commit/c3cd2f1678367cea66b05c326762d2b7a8a1ef42))
+* **deps:** bump tokio from 1.15.0 to 1.16.1 ([f9ff5ac](https://github.com/vtavernier/utc-telegram-bot/commit/f9ff5acaa0e2d61874029ef1ca0fe2520ff4c5ec))
+
 ## [1.4.2](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.1...v1.4.2) (2022-11-03)
 
 
