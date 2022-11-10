@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.3...v1.4.4) (2022-11-10)
+
+
+### Bug Fixes
+
+* **docker:** add missing image metadata ([#23](https://github.com/vtavernier/utc-telegram-bot/issues/23)) ([4ba913e](https://github.com/vtavernier/utc-telegram-bot/commit/4ba913e0f2bbd0cb1f1428259d31d816d95678a0))
+
 ## [1.4.3](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.2...v1.4.3) (2022-11-10)
 
 
