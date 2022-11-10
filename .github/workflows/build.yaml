@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    uses: vtavernier/github-workflows/.github/workflows/build-rust-docker.yml@v1.0.0-alpha.5
+    uses: vtavernier/github-workflows/.github/workflows/build-rust-docker.yml@v1.0.0-alpha.6
     secrets:
       docker_password: ${{ secrets.GITHUB_TOKEN }}
       GH_TOKEN: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
