@@ -4,12 +4,12 @@
   "baseBranches": ["dev"],
   "packageRules": [
     {
-      "matchPackageNames": ["docker.io/library/rust"],
-      "extends": [":disableRenovate"]
-    },
-    {
       "matchUpdateTypes": ["minor", "patch"],
       "extends": [":automergeAll", ":automergeBranch"]
+    },
+    {
+      "matchPackageNames": ["docker.io/library/rust"],
+      "extends": [":disableRenovate"]
     },
     {
       "matchPackageNames": ["gcr.io/distroless/cc"],
