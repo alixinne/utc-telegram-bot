@@ -1,3 +1,13 @@
+## [1.4.5](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.4...v1.4.5) (2022-11-16)
+
+
+### Dependencies and Other Build Updates
+
+* **deps:** bump futures from 0.3.19 to 0.3.25 ([ab9ce96](https://github.com/vtavernier/utc-telegram-bot/commit/ab9ce964ee69f48f46ea053deb37c63914e3bb71))
+* **deps:** bump rand from 0.8.4 to 0.8.5 ([e8b5243](https://github.com/vtavernier/utc-telegram-bot/commit/e8b524331dce162349801dab809a0212473c77e0))
+* **deps:** bump serde from 1.0.133 to 1.0.147 ([833e6a1](https://github.com/vtavernier/utc-telegram-bot/commit/833e6a14631d50d48d16272c8e85fa5af62491dd))
+* **deps:** bump tracing from 0.1.29 to 0.1.34 ([ae43e92](https://github.com/vtavernier/utc-telegram-bot/commit/ae43e923093523c50402df5c19dd2ee6019b894a))
+
 ## [1.4.4](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.3...v1.4.4) (2022-11-10)
 
 
