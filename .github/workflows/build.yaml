@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    uses: vtavernier/github-workflows/.github/workflows/build-rust-docker.yml@v1.0.0-alpha.7
+    uses: vtavernier/github-workflows/.github/workflows/build-rust-docker.yml@v1.0.0-alpha.8
     with:
       develop_branch_name: dev
     secrets:
