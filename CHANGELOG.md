@@ -1,3 +1,13 @@
+## [1.4.6](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.5...v1.4.6) (2022-12-27)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate sqlx to 0.6 ([82b7489](https://github.com/vtavernier/utc-telegram-bot/commit/82b7489e79f11807340e9184b0ceeb46085429cf))
+* **deps:** update rust crate tokio to 1.21 ([42a0b73](https://github.com/vtavernier/utc-telegram-bot/commit/42a0b731bd8f090131a20a3989acf6bda87f497c))
+* **deps:** update rust crate tokio to 1.22 ([6d6ce1a](https://github.com/vtavernier/utc-telegram-bot/commit/6d6ce1a5b9fbfa9d9ef3cf2c541feb9e84e50bd8))
+* **deps:** update rust crate tokio to 1.23 ([2b18233](https://github.com/vtavernier/utc-telegram-bot/commit/2b182335a4ba1c116b54fb3b7d0195f2cac7e72d))
+
 ## [1.4.5](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.4...v1.4.5) (2022-11-16)
 
 
