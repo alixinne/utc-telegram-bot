@@ -29,7 +29,7 @@ telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = 
 warp = { version = "0.3", optional = true }
 
 # Image renderer dependencies
-image = { version = "0.23", default-features = false, features = ["jpeg"], optional = true }
+image = { version = "0.24", default-features = false, features = ["jpeg"], optional = true }
 cairo-rs = { version = "0.16", optional = true }
 pangocairo = { version = "0.16", optional = true }
 pango = { version = "0.16", optional = true }
