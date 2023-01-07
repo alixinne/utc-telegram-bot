@@ -1,6 +1,6 @@
 [package]
 name = "utc-telegram-bot"
-version = "1.4.6"
+version = "1.4.7"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
 
