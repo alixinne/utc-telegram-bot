@@ -33,14 +33,14 @@ impl Renderer {
         // Encode it as JPEG
         // TODO: DO not copy here
         let image =
-            image::RgbaImage::from_raw(128, 128, (&*surface.data().unwrap()).to_vec()).unwrap();
+            image::RgbaImage::from_raw(128, 128, (*surface.data().unwrap()).to_vec()).unwrap();
 
-        let mut encoded: Vec<u8> = Vec::new();
+        let mut cursor = std::io::Cursor::new(Vec::new());
         image::DynamicImage::ImageRgba8(image)
-            .write_to(&mut encoded, image::ImageOutputFormat::Jpeg(100))
+            .write_to(&mut cursor, image::ImageOutputFormat::Jpeg(100))
             .unwrap();
 
-        encoded
+        cursor.into_inner()
     }
 }
 
