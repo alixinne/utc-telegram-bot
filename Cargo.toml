@@ -14,7 +14,7 @@ rand = { version = "0.8", default-features = false, features = ["std_rng", "smal
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "1.0"
-tokio = { version = "1.28", features = ["macros", "rt-multi-thread", "net", "signal"] }
+tokio = { version = "1.29", features = ["macros", "rt-multi-thread", "net", "signal"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
@@ -24,15 +24,15 @@ structopt = { version = "0.3", features = ["paw"] }
 
 # Server features
 chrono = { version = "0.4", optional = true }
-sqlx = { version = "0.6", features = ["runtime-tokio-rustls", "sqlite", "macros", "migrate", "chrono"], optional = true }
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "sqlite", "macros", "migrate", "chrono"], optional = true }
 telegram-bot = { git = "https://github.com/telegram-rs/telegram-bot.git", rev = "65ad5cf", optional = true }
 warp = { version = "0.3", optional = true }
 
 # Image renderer dependencies
 image = { version = "0.24", default-features = false, features = ["jpeg"], optional = true }
-cairo-rs = { version = "0.17", optional = true }
-pangocairo = { version = "0.17", optional = true }
-pango = { version = "0.17", optional = true }
+cairo-rs = { version = "0.18", optional = true }
+pangocairo = { version = "0.18", optional = true }
+pango = { version = "0.18", optional = true }
 sha2 = { version = "0.10", optional = true }
 hex = { version = "0.4", optional = true }
 
