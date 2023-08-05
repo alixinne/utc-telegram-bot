@@ -146,8 +146,8 @@ impl TransformList {
     pub fn get_all_matches<'a>(&'a self, src: &str) -> Vec<FuzzyMatchResult<'a>> {
         let mut v: Vec<_> = self
             .transforms
-            .iter()
-            .map(|(_k, v)| FuzzyMatchResult {
+            .values()
+            .map(|v| FuzzyMatchResult {
                 transform: v,
                 score: v.idx as i64,
                 result: v.as_ref().map_string(src),
