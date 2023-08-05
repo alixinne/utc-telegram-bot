@@ -1,3 +1,10 @@
+## [1.4.9](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.8...v1.4.9) (2023-08-05)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([8ae6e80](https://github.com/vtavernier/utc-telegram-bot/commit/8ae6e801c93f2383de62cf2df1b7dad1b0035fa8))
+
 ## [1.4.8](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.7...v1.4.8) (2023-03-15)
 
 
