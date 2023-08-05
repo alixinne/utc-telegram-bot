@@ -58,7 +58,7 @@ impl Db {
         .bind(1)
         .bind(chrono::Utc::now())
         .bind(chrono::Utc::now())
-        .execute(&mut self.pool.acquire().await?)
+        .execute(&self.pool)
         .await?;
 
         Ok(())
