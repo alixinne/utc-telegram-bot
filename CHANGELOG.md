@@ -1,3 +1,10 @@
+## [1.4.11](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.10...v1.4.11) (2023-08-21)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate tokio to 1.32 ([20c854d](https://github.com/vtavernier/utc-telegram-bot/commit/20c854d8e21fdc4ee8c91761c4f547e98148785c))
+
 ## [1.4.10](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.9...v1.4.10) (2023-08-14)
 
 
