@@ -2762,7 +2762,7 @@ dependencies = [
 
 [[package]]
 name = "utc-telegram-bot"
-version = "1.4.12"
+version = "1.4.13"
 dependencies = [
  "cairo-rs",
  "chrono",

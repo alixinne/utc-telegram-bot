@@ -1,3 +1,10 @@
+## [1.4.13](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.12...v1.4.13) (2023-11-27)
+
+
+### Bug Fixes
+
+* **docker:** switch to cc-debian12 ([2b78573](https://github.com/vtavernier/utc-telegram-bot/commit/2b7857360a2e812c88b1279b037608623a773424))
+
 ## [1.4.12](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.11...v1.4.12) (2023-11-13)
 
 
