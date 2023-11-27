@@ -14,7 +14,7 @@ COPY migrations /src/migrations
 COPY src /src/src
 RUN touch -am src/main.rs && cargo build --release
 
-FROM gcr.io/distroless/cc@sha256:b82f113425c5b5c714151aaacd8039bc141821cdcd3c65202d42bdf9c43ae60b
+FROM gcr.io/distroless/cc-debian12@sha256:a9056d2232d16e3772bec3ef36b93a5ea9ef6ad4b4ed407631e534b85832cf40
 COPY --from=build /src/target/release/utc-telegram-bot /
 COPY public /public
 ENTRYPOINT ["/utc-telegram-bot"]
