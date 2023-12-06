@@ -1,3 +1,10 @@
+## [1.4.14](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.13...v1.4.14) (2023-12-06)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate warp to v0.3.3 [security] ([733a8d0](https://github.com/vtavernier/utc-telegram-bot/commit/733a8d0fe758c3ee206ede5cbd3e39828daec6bc))
+
 ## [1.4.13](https://github.com/vtavernier/utc-telegram-bot/compare/v1.4.12...v1.4.13) (2023-11-27)
 
 
