@@ -9,4 +9,4 @@ transform text. Based on <https://qaz.wtf/u/convert.cgi>. Zalgo based on <http:/
 
 ## Author
 
-Vincent Tavernier <vince.tavernier@gmail.com>
+Alixinne <alixinne@pm.me>
