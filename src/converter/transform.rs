@@ -3,7 +3,7 @@ pub trait Transformer<'a> {
 }
 
 pub trait Transform: std::fmt::Debug {
-    fn get_transfomer(&'_ self, src: &str) -> Box<dyn Transformer + '_>;
+    fn get_transfomer(&'_ self, src: &str) -> Box<dyn Transformer<'_> + '_>;
 
     fn map_string(&self, src: &str) -> String {
         // First, look for ranges to map

@@ -1,19 +1,22 @@
+use std::sync::Arc;
+
 use heck::ToSnakeCase;
 
 use super::Transform;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TransformEntry {
     pub short_name: String,
+    #[expect(dead_code)]
     pub name: String,
     pub full_name: String,
     pub idx: usize,
 
-    transform: Box<dyn Transform + Send + Sync>,
+    transform: Arc<dyn Transform + Send + Sync>,
 }
 
 impl TransformEntry {
-    pub fn new(idx: usize, name: &str, transform: Box<dyn Transform + Send + Sync>) -> Self {
+    pub fn new(idx: usize, name: &str, transform: Arc<dyn Transform + Send + Sync>) -> Self {
         let full_name = name;
         let name = full_name
             .replace(['(', ')'], "")

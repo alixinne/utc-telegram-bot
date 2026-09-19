@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
 use sqlx::{sqlite::SqliteConnectOptions, SqlitePool};
+use teloxide::types::InlineQuery;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -27,7 +28,7 @@ impl Db {
         Ok(Self { pool })
     }
 
-    pub async fn record_query(&mut self, query: &telegram_bot::InlineQuery) -> Result<(), Error> {
+    pub async fn record_query(&mut self, query: &InlineQuery) -> Result<(), Error> {
         sqlx::query(
             "
             INSERT INTO users
@@ -50,7 +51,7 @@ impl Db {
                        last_seen = $8
             ",
         )
-        .bind(unsafe { std::mem::transmute::<_, i64>(query.from.id) })
+        .bind(unsafe { std::mem::transmute::<teloxide::prelude::UserId, i64>(query.from.id) })
         .bind(&query.from.first_name)
         .bind(&query.from.last_name)
         .bind(&query.from.username)

@@ -1,10 +1,11 @@
-use std::collections::HashMap;
 use std::fmt;
+use std::{collections::HashMap, sync::Arc};
 
 use super::{CharMap, Map, Spongebob, Spread, TransformEntry, TransformError, Zalgo, ZalgoPreset};
 
 static RAW_MAP_STR: &str = include_str!("../../alphabets.txt");
 
+#[derive(Clone)]
 pub struct TransformList {
     transforms: HashMap<String, TransformEntry>,
     matcher: BotFuzzyMatcher,
@@ -20,30 +21,30 @@ impl TransformList {
     pub fn new() -> Self {
         let mut mp = HashMap::new();
 
-        let entry = TransformEntry::new(0, "Spongebob", Box::new(Spongebob::new()));
+        let entry = TransformEntry::new(0, "Spongebob", Arc::new(Spongebob::new()));
         mp.insert(entry.short_name.clone(), entry);
 
-        let entry = TransformEntry::new(1, "Spread", Box::new(Spread::new()));
+        let entry = TransformEntry::new(1, "Spread", Arc::new(Spread::new()));
         mp.insert(entry.short_name.clone(), entry);
 
         let entry = TransformEntry::new(
             2,
             "Zalgo",
-            Box::new(Zalgo::new(ZalgoPreset::Normal, true, true, true)),
+            Arc::new(Zalgo::new(ZalgoPreset::Normal, true, true, true)),
         );
         mp.insert(entry.short_name.clone(), entry);
 
         let entry = TransformEntry::new(
             3,
             "Zalgo Mini",
-            Box::new(Zalgo::new(ZalgoPreset::Mini, true, true, true)),
+            Arc::new(Zalgo::new(ZalgoPreset::Mini, true, true, true)),
         );
         mp.insert(entry.short_name.clone(), entry);
 
         let entry = TransformEntry::new(
             4,
             "Zalgo Maxi",
-            Box::new(Zalgo::new(ZalgoPreset::Maxi, true, true, true)),
+            Arc::new(Zalgo::new(ZalgoPreset::Maxi, true, true, true)),
         );
         mp.insert(entry.short_name.clone(), entry);
 
@@ -81,7 +82,7 @@ impl TransformList {
 
                         // Create transform entry
                         let entry =
-                            TransformEntry::new(current_map_idx, &current_name, Box::new(map));
+                            TransformEntry::new(current_map_idx, &current_name, Arc::new(map));
 
                         // current_name used by that point
                         current_name.clear();
@@ -111,6 +112,7 @@ impl TransformList {
         }
     }
 
+    #[allow(dead_code)]
     pub fn transform_string(&self, map_name: &str, src: &str) -> Result<String, TransformError> {
         self.transforms
             .get(map_name)
@@ -172,4 +174,4 @@ impl fmt::Debug for TransformList {
     }
 }
 
-type BotFuzzyMatcher = fuzzy_matcher::skim::SkimMatcherV2;
+type BotFuzzyMatcher = Arc<fuzzy_matcher::skim::SkimMatcherV2>;
