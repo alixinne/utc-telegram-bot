@@ -16,9 +16,6 @@ pub use transform::*;
 mod transform_entry;
 pub use transform_entry::*;
 
-mod transform_error;
-pub use transform_error::*;
-
 mod transform_list;
 pub use transform_list::*;
 

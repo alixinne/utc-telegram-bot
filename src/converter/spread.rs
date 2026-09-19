@@ -26,7 +26,7 @@ impl Transformer<'_> for SpreadTransformer {
 }
 
 impl Transform for Spread {
-    fn get_transfomer(&'_ self, _src: &str) -> Box<dyn Transformer + '_> {
+    fn get_transfomer(&'_ self, _src: &str) -> Box<dyn Transformer<'_> + '_> {
         Box::new(SpreadTransformer::new())
     }
 }
