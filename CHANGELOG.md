@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/alixinne/utc-telegram-bot/compare/v1.4.14...v1.5.0) (2026-09-19)
+
+
+### Bug Fixes
+
+* update github profile information ([280b708](https://github.com/alixinne/utc-telegram-bot/commit/280b7084c5422b286e8c23fd0545f9df22992cd1))
+
+
+### Features
+
+* **deps:** update dependencies, use teloxide ([82dcaff](https://github.com/alixinne/utc-telegram-bot/commit/82dcaff5fa5cd65f8670fe65bfaf6b54d765c6c9))
+
 ## [1.4.14](https://github.com/alixinne/utc-telegram-bot/compare/v1.4.13...v1.4.14) (2023-12-06)
 
 
