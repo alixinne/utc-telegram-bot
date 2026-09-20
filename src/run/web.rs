@@ -1,4 +1,4 @@
-use futures::{channel::oneshot, Future};
+use futures::{Future, channel::oneshot};
 use thiserror::Error;
 use tokio::net;
 use warp::Filter;

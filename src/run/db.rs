@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use sqlx::{sqlite::SqliteConnectOptions, SqlitePool};
+use sqlx::{SqlitePool, sqlite::SqliteConnectOptions};
 use teloxide::types::InlineQuery;
 use thiserror::Error;
 

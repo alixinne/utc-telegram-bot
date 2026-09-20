@@ -2,7 +2,7 @@
 name = "utc-telegram-bot"
 version = "1.5.0"
 authors = ["Alixinne <alixinne@pm.me>"]
-edition = "2018"
+edition = "2024"
 
 [dependencies]
 crc = "3.0"
