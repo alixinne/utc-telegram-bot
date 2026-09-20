@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/alixinne/utc-telegram-bot/compare/v1.5.0...v1.5.1) (2026-09-20)
+
+
+### Bug Fixes
+
+* add introduction message again ([341006e](https://github.com/alixinne/utc-telegram-bot/commit/341006efff3283e2833ee2acd161b2c410ced112))
+
 # [1.5.0](https://github.com/alixinne/utc-telegram-bot/compare/v1.4.14...v1.5.0) (2026-09-19)
 
 
